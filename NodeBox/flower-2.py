@@ -14,7 +14,7 @@ def draw():
     frame += 1
     
    # print frame
-    percent = frame / (300.0 * len(data))
+    percent = frame / (500.0 / len(data))
     percent = min(1, percent)
     
     
