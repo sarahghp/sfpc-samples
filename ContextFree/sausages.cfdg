@@ -1,0 +1,23 @@
+startshape k
+ 
+background {h 162 sat 1 b .65}
+ 
+rule k {20*{x 1}{20*{y 1}A{ h 359 sat 0.32 b 1.0}}}
+rule A{pa{}}
+rule A{pa{r 90}}
+rule A{pad{}}
+rule A{pad{r 90}}
+ 
+path pa{
+MOVETO{x 0 y -.5}
+ARCTO{x -.5 y 0 r .5}
+MOVETO{x 0 y .5}
+ARCTO{x .5 y 0 r .5}
+STROKE{width .2 p roundcap}
+}
+ 
+path pad{
+MOVETO{x -.5 y 0}
+LINETO{x .5 y 0 }
+STROKE{width .6 p roundcap}
+}

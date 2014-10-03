@@ -1,0 +1,23 @@
+startshape branch
+
+background {h 162 sat 1 b 1}
+
+rule branch {
+	CIRCLE [size 1 b .8 alpha .5	]
+	fork { }
+}
+
+rule fork {
+ 	branch[y 1.5 s .95 r 2]
+ }
+
+rule fork 0.1 {
+ 	branch [y 2.5 s .95 r 1]
+ 	branch [y 1.5 s .95 r 120]
+ }
+
+rule fork 0.2 { 
+	branch [y -1.5 s .9 r 1]
+	branch [y -2.5 s .9 r 30]
+}
+
