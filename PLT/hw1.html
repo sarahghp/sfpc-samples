@@ -28,12 +28,11 @@
   negNum    = '-'floatDig/'-'digit 
 
 
-  string    = quote s:str quote {return s.join('')}
-
+  string    = quote s:str quote {return s.join(',').split(',').join('')}
   quote     = '"'
 
   letter    = [A-Za-z]+
-  str       = [A-Za-z' ']+
+  str       = (letter / space)+
   space     = ' '+
   word      = l:letter { return l.join('') }
 
