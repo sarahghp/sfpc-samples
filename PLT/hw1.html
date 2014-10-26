@@ -16,7 +16,7 @@
 <title>Language</title>
 
 <grammar>
-  start     = nConcat/number/string/boolean 
+  start     = ops/nConcat/number/string/boolean
 
   
   number    = float/integer
@@ -24,7 +24,7 @@
   float     = f:floatDig {return parseFloat(f.join(''), 10)}
   nConcat   = n:negNum {return parseFloat(n[0].concat(n[1]).split(',').join(''), 10)}
   digit     = [0-9]+
-  floatDig = [0-9'.']+
+  floatDig  = [0-9'.']+
   negNum    = '-'floatDig/'-'digit 
 
 
@@ -37,9 +37,10 @@
   word      = l:letter { return l.join('') }
 
   boolean   = b:word {return b==='true' || b==='yes' || b==='on'}
+  ops       = o:operator space a:digit space c:digit {return eval(a+o+c)}
 
-  operator  = '*'/'+'/'-'
-  nesting   = '"'/'(+'
+  operator  = ('*' / '+' / '-')
+  nesting   = '(+'
 
 </grammar>
 
