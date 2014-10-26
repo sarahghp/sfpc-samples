@@ -16,25 +16,30 @@
 <title>Language</title>
 
 <grammar>
-  start     = nConcat/number 
-  space     = ' '+
+  start     = nConcat/number/string/boolean 
+
   
   number    = float/integer
   integer   = digit ? d:digit { return parseInt(d.join(''), 10) }
-  float     = f:floatDigit {return parseFloat(f.join(''), 10)}
+  float     = f:floatDig {return parseFloat(f.join(''), 10)}
+  nConcat   = n:negNum {return parseFloat(n[0].concat(n[1]).split(',').join(''), 10)}
   digit     = [0-9]+
-  floatDigit = [0-9'.']+
-  negNum    = '-'floatDigit/'-'digit 
-  nConcat    = n:negNum {return parseFloat(n[0].concat(n[1]).split(',').join(''), 10)}
+  floatDig = [0-9'.']+
+  negNum    = '-'floatDig/'-'digit 
 
-  
+
+  string    = quote s:str quote {return s.join('')}
+
+  quote     = '"'
+
   letter    = [A-Za-z]+
-  word      = s:letter+ { return l.join('') }
-  string    = "" letter+
-  stringIntro = space
+  str       = [A-Za-z' ']+
+  space     = ' '+
+  word      = l:letter { return l.join('') }
+
+  boolean   = b:word {return b==='true' || b==='yes' || b==='on'}
 
   operator  = '*'/'+'/'-'
-  boolean   = ['true''false'] 
   nesting   = '"'/'(+'
 
 </grammar>
