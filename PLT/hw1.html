@@ -16,11 +16,11 @@
 <title>Language</title>
 
 <grammar>
-  start     = nesting/ops/nConcat/number/string/boolean
+  start     = nesting/ops/nConcat/number/boolean/string
 
   
   number    = float/integer
-  integer   = digit ? d:digit { return parseInt(d.join(''), 10) }
+  integer   = d:digit { return parseInt(d.join(''), 10) }
   float     = f:floatDig {return parseFloat(f.join(''), 10)}
   nConcat   = n:negNum {return parseFloat(n[0].concat(n[1]).split(',').join(''), 10)}
   digit     = [0-9]+
@@ -31,12 +31,12 @@
   string    = quote s:str quote {return s.join(',').split(',').join('')}
   quote     = '"'
 
-  letter    = [A-Za-z]+
+  letter    = [^" ]+
   str       = (letter / space)+
   space     = ' '+
   word      = l:letter { return l.join('') }
 
-  boolean   = b:word {return b==='true' || b==='yes' || b==='on'}
+  boolean   = b:word {return b==='true' || b==='yes' || b==='on' || b==='love'}
   
   ops       = o:operator space a:number space c:number {return eval(a+o+c)}
   operator  = ('*' / '+' / '-')
