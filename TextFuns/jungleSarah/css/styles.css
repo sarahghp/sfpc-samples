@@ -24,3 +24,9 @@ body {
   top: 70%;
   width: 100%;
 }
+.legend {
+  position: absolute;
+  bottom: 20px;
+  left: 10px;
+  font-size: 10px;
+}
