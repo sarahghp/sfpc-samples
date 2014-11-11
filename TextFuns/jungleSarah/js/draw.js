@@ -30,48 +30,27 @@ function draw(filename, author) {
 
     d3.select('#word')
       .style('text-anchor', 'end')
-      .text(dataView)
+      .text(dataView)    
 
-    // var chart = svg.selectAll('rect')
-      // .data(dataView)
-      // .enter()
-      // .append('tect')
-      //   .text(function(d){ return d; });
-    
-
-    // function changeWord() {
+    function changeWord() {
 
       // Update data view
       
       n++;
-      n %= data.length;
+      n %= text.length;
+
+      console.log(dataView);
 
       dataView = [data[0][n]];
 
-      // Update circle & background
-
-      var bookCircles = svg.selectAll('circle')
-        .data(dataView);
-
       // console.log(dataView);
 
-      svg.selectAll('rect')
-         .data(dataView)
-         .attr("width", "100%")
-         .attr("height", "100%")
-         .attr("fill", function(d){  return colors[author];  });  
+      d3.select('#word')
+        .text(dataView);
 
-      bookCircles.transition()
-        .duration(1000)
-        .ease('elastic')
-        .attr('r', function(d, i){
-          return Math.sqrt(rScale(d.pages)/Math.PI);
-        }) /*square root of pages normalized over pi*/
-        .attr('fill', function(d){ return colors[d.genre]; });
-    // }
+    }
 
-    // setInterval(changeWord, 1500);   
-    // });
+    setInterval(changeWord, 200);   
   })
 
 }
