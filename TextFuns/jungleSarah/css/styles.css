@@ -1,0 +1,15 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto+Slab:400,300,100,700);
+body {
+  margin: 0;
+  font-family: 'Roboto Slab';
+  font-size: 60px;
+  font-weight: 100;
+  letter-spacing: 2px;
+  color: white;
+}
+#word {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+}

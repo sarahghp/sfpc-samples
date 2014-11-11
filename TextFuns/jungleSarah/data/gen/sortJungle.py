@@ -39,10 +39,10 @@ def generateUniquesFile (text, title):
 
   superCleanWords = set(sorted(superCleanWords))
 
-  outputFile = open('_' + title + "Sorted.txt", 'w')
+  outputFile = open('_' + title + "Sorted.csv", 'w')
 
   for word in superCleanWords:
-    outputFile.write(word + "\n")
+    outputFile.write(word + ", ")
 
   outputFile.close()
 
