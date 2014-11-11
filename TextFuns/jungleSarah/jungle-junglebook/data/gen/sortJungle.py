@@ -13,7 +13,6 @@ def intersect(a, b):
 def cleanWords (toClean):
   words = toClean.split()
   words = set(words)
-  
   cleanWords = []
 
   for word in words:
@@ -21,43 +20,32 @@ def cleanWords (toClean):
     word = word.lower()
     cleanWords.append(word)
 
+  return cleanWords
+
+sharedWords = intersect(cleanWords(sinclairWords), cleanWords(kiplingWords))
+
+def generateUniquesFile (text, title):
+
   punctuations = '''0123456789!()-[]{};:'"_\,<>./?@#$%^&*_~--'''
   superCleanWords = []
 
-  for word in cleanWords:
+  for word in text:
     noPunct = ""
     for char in word:
       if char not in punctuations:
         noPunct = noPunct + char
-    if noPunct is not "" and noPunct not in stopwords:
+    if noPunct is not "" and noPunct not in stopwords and noPunct not in sharedWords:
       superCleanWords.append(noPunct)
 
-  return superCleanWords
-
-sinclairWords = cleanWords(sinclairWords)
-kiplingWords = cleanWords(kiplingWords)
-sharedWords = intersect(sinclairWords, kiplingWords)
-
-def generateUniquesFile (text, title):
-
-  finalWords = []
-
-  if title is not 'shared':
-    for word in text:
-      if word not in sharedWords:
-        finalWords.append(word)
-  else:
-    finalWords = text
-
-  finalWords = set(sorted(finalWords))
+  superCleanWords = set(sorted(superCleanWords))
 
   outputFile = open('_' + title + "Sorted.csv", 'w')
 
-  for word in finalWords:
+  for word in superCleanWords:
     outputFile.write(word + ", ")
 
   outputFile.close()
 
-generateUniquesFile(sinclairWords, 'sinclair')
-generateUniquesFile(kiplingWords, 'kipling')
+generateUniquesFile(cleanWords(sinclairWords), 'sinclair')
+generateUniquesFile(cleanWords(kiplingWords), 'kipling')
 generateUniquesFile(sharedWords, 'shared')
