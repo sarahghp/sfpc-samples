@@ -25,11 +25,18 @@ v:x   : assign the result of the match x to the variable v
   start                         = expression
 
   operation                     = space '(' space op:operator space args:expression+ ')' space { return eval(args.join(op)) }
-  operator                      = '+' / '-' / '/' / '*' / '<' / '>' / '=' { return "==" }
+  unevalOp                      = space '(' space op:operator space args:expression+ ')' space { return args.join(op) }
   
-  expression                    = operation / conditional / log / number
-  conditional                   = space '(' space 'if' space cond:expression space a:expression space b:expression ')' { return cond ? eval(a) : eval(b); }
-  log                           = space '(' space 'log' space e:expression ')' { return 'console.log(' + e + ')' }
+  operator                      = '+' / '-' / '/' / '*' / '<' / '>' / '=' { return "==" } 
+  
+  expression                    = conditional / operation / log / number
+  unevalExp                     = unevalOp / unevalLog / number
+  
+  conditional                   = space '(' space 'if' space cond:expression space a:unevalExp space b:unevalExp ')' 
+                                  { return cond ? eval(a) : eval(b); }
+                                
+  log                           = space '(' space 'log' space u:unevalExp ')' { console.log(eval(u)) }
+  unevalLog                     = space '(' space 'log' space u:unevalExp ')' { return 'console.log(' + u + ')' }
   
 
   number                        = d:digit+ space { return parseInt( d.join('') ) }
