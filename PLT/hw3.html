@@ -28,8 +28,8 @@ v:x   : assign the result of the match x to the variable v
   operator                      = '+' / '-' / '/' / '*' / '<' / '>' / '=' { return "==" }
   
   expression                    = operation / conditional / log / number
-  conditional                   = space '(' space 'if' space cond:expression space a:expression space b:expression ')' { return cond ? a : b; }
-  log                           = space '(' space 'log' space e:expression ')' { console.log(e) }
+  conditional                   = space '(' space 'if' space cond:expression space a:expression space b:expression ')' { return cond ? eval(a) : eval(b); }
+  log                           = space '(' space 'log' space e:expression ')' { return 'console.log(' + e + ')' }
   
 
   number                        = d:digit+ space { return parseInt( d.join('') ) }
