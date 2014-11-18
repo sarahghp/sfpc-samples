@@ -1,10 +1,19 @@
-body {
+body, a {
   margin: 0;
   font-family: 'Roboto Slab';
   font-size: 60px;
   font-weight: 100;
   letter-spacing: 2px;
   color: white;
+}
+
+a {
+  font-size: 10px;
+  text-decoration: none;
+
+  &:hover, &:active, &:active {
+    border-bottom: 2px solid hsla(360, 100%, 100%, 0.5); 
+  }
 }
 
 #jungle, #junglebook {
@@ -37,7 +46,7 @@ body {
 
 .legend {
   position: absolute;
-  bottom: 20px;
+  top: 20px;
   left: 10px;
   font-size: 10px;
   z-index: 2;
