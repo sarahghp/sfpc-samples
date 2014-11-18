@@ -3,7 +3,7 @@ function draw(filename, author, book) {
     height = window.innerHeight;
 
   var colors = {
-    'sinclair': 'hsla(197, 47%, 21%, 1)',
+    'sinclair': 'hsla(182, 8%, 17%, 1)',
     'kipling': 'hsla(122, 100%, 21%, 1)',
     'both': 'hsla(233, 47%, 21%, 1)'
   };
@@ -45,7 +45,7 @@ function draw(filename, author, book) {
 
     }
 
-    setInterval(changeWord, 200);   
+    setInterval(changeWord, 250);   
   })
 
 }
@@ -55,7 +55,7 @@ function drawTogether(){
     height = window.innerHeight;
 
   var colors = {
-    'sinclair': 'hsla(197, 47%, 21%, 1)',
+    'sinclair': 'hsla(182, 8%, 17%, 1)',
     'kipling': 'hsla(122, 100%, 21%, 1)',
     'both': 'hsla(233, 47%, 21%, 1)'
   };
@@ -96,7 +96,7 @@ function drawTogether(){
 
     }
 
-    setInterval(changeWord, 200);   
+    setInterval(changeWord, 250);   
   })
 
 }
@@ -106,14 +106,12 @@ $(document).ready(function(){
   setTimeout(draw('data/_kiplingSorted.csv', 'kipling', 'junglebook'), 150);
 
   $('#together-link').on('click', function(){
-    // $(this).addClass('selected');
     $('#jungle, #junglebook').addClass('hidden');
     $('#together').removeClass('hidden');
     drawTogether()
   });
 
   $('#apart-link').on('click', function(){
-    // $(this).addClass('selected');
     $('#jungle, #junglebook').removeClass('hidden');
     $('#together').addClass('hidden');
   });
