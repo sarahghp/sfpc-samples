@@ -8,11 +8,18 @@ function draw(filename, author, book) {
     'both': 'hsla(233, 47%, 21%, 1)'
   };
 
+  if (book === 'together'){
+     var svg = d3.select('#'+book)
+      .append('svg')
+      .attr('width', width)
+      .attr('height', height);
+  } else { 
+    var svg = d3.select('#'+book)
+      .append('svg')
+      .attr('width', width)
+      .attr('height', height/2);
+  }
 
-  var svg = d3.select('#'+book)
-    .append('svg')
-    .attr('width', width)
-    .attr('height', height/2);
 
   d3.text(filename, function(error, text){
 
@@ -50,56 +57,6 @@ function draw(filename, author, book) {
 
 }
 
-function drawTogether(){
-  var width = window.innerWidth,
-    height = window.innerHeight;
-
-  var colors = {
-    'sinclair': 'hsla(182, 8%, 17%, 1)',
-    'kipling': 'hsla(122, 100%, 21%, 1)',
-    'both': 'hsla(233, 47%, 21%, 1)'
-  };
-
-
-  var svg = d3.select('#together')
-    .append('svg')
-    .attr('width', '100%')
-    .attr('height', height);
-
-  d3.text('data/_sharedSorted.csv', function(error, text){
-
-    var n = 0,
-        data = d3.csv.parseRows(text),
-        dataView = [data[0][n]];
-    
-    svg.append('rect')
-      .data(dataView)
-      .attr('width', '100%')
-      .attr('height', '100%')
-      .attr('fill', 'hsla(233, 47%, 21%, 1)');
-
-    d3.select('#together-word')
-      .style('text-anchor', 'end')
-      .text(dataView)    
-
-    function changeWord() {
-
-      // Update data view
-      
-      n++;
-      n %= text.length;
-
-      dataView = [data[0][n]];
-
-      d3.select('#together-word')
-        .text(dataView);
-
-    }
-
-    setInterval(changeWord, 250);   
-  })
-
-}
 
 $(document).ready(function(){
   draw('data/_sinclairSorted.csv', 'sinclair', 'jungle');
@@ -108,7 +65,7 @@ $(document).ready(function(){
   $('#together-link').on('click', function(){
     $('#jungle, #junglebook').addClass('hidden');
     $('#together').removeClass('hidden');
-    drawTogether()
+    setTimeout(draw('data/_sharedSorted.csv', 'both', 'together'), 150);
   });
 
   $('#apart-link').on('click', function(){
