@@ -12,21 +12,29 @@ body {
   margin: 0;
 }
 #jungle-word,
-#junglebook-word {
+#junglebook-word,
+#together-word {
   position: absolute;
   width: 100%;
   text-align: center;
+  display: block;
 }
 #jungle-word {
   top: 20%;
 }
 #junglebook-word {
   top: 70%;
-  width: 100%;
+}
+#together-word {
+  top: 40%;
+}
+#together {
+  display: none;
 }
 .legend {
   position: absolute;
   bottom: 20px;
   left: 10px;
   font-size: 10px;
+  z-index: 2;
 }

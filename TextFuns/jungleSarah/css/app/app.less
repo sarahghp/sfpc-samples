@@ -9,12 +9,14 @@ body {
 
 #jungle, #junglebook {
   margin: 0;
+  // display: none;
 }
 
-#jungle-word, #junglebook-word {
+#jungle-word, #junglebook-word, #together-word {
   position: absolute;
   width: 100%;
   text-align: center;
+  display: block;
 }
 
 #jungle-word {
@@ -23,7 +25,14 @@ body {
 
 #junglebook-word {
   top: 70%;
-  width: 100%;
+}
+
+#together-word {
+  top: 40%;
+}
+
+#together {
+  display: none;
 }
 
 .legend {
@@ -31,4 +40,5 @@ body {
   bottom: 20px;
   left: 10px;
   font-size: 10px;
+  z-index: 2;
 }
