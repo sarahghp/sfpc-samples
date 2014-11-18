@@ -37,8 +37,6 @@ function draw(filename, author, book) {
       n++;
       n %= text.length;
 
-      console.log(dataView);
-
       dataView = [data[0][n]];
 
 
@@ -91,8 +89,6 @@ function drawTogether(){
       n++;
       n %= text.length;
 
-      console.log(dataView);
-
       dataView = [data[0][n]];
 
       d3.select('#together-word')
@@ -108,5 +104,23 @@ function drawTogether(){
 $(document).ready(function(){
   draw('data/_sinclairSorted.csv', 'sinclair', 'jungle');
   setTimeout(draw('data/_kiplingSorted.csv', 'kipling', 'junglebook'), 150);
-  // drawTogether()
+
+  $('#together-link').on('click', function(){
+    // $(this).addClass('selected');
+    $('#jungle, #junglebook').addClass('hidden');
+    $('#together').removeClass('hidden');
+    drawTogether()
+  });
+
+  $('#apart-link').on('click', function(){
+    // $(this).addClass('selected');
+    $('#jungle, #junglebook').removeClass('hidden');
+    $('#together').addClass('hidden');
+  });
+
+  $('.legend').on('click', 'a', function(){
+    $('.selected').toggleClass('selected');
+    $(this).addClass('selected');
+  })
+
 });

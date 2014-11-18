@@ -11,14 +11,13 @@ a {
   font-size: 10px;
   text-decoration: none;
 
-  &:hover, &:active, &:active {
+  &:hover, &:focus, &:active, &.selected {
     border-bottom: 2px solid hsla(360, 100%, 100%, 0.5); 
   }
 }
 
 #jungle, #junglebook {
   margin: 0;
-  // display: none;
 }
 
 #jungle-word, #junglebook-word, #together-word {
@@ -40,7 +39,7 @@ a {
   top: 40%;
 }
 
-#together {
+.hidden {
   display: none;
 }
 

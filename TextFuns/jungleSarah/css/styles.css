@@ -12,7 +12,10 @@ a {
   font-size: 10px;
   text-decoration: none;
 }
-a:hover {
+a:hover,
+a:focus,
+a:active,
+a.selected {
   border-bottom: 2px solid rgba(255, 255, 255, 0.5);
 }
 #jungle,
@@ -36,7 +39,7 @@ a:hover {
 #together-word {
   top: 40%;
 }
-#together {
+.hidden {
   display: none;
 }
 .legend {
