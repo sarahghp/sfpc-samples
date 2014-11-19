@@ -14,20 +14,12 @@ var DRAW = (function(){
 
       d3.select('.'+author).remove();
 
-      if (book === 'together'){
-         var svg = d3.select('#'+book)
+      var svg = d3.select('#'+book)
           .append('svg')
           .attr('width', width)
-          .attr('height', height)
           .attr('class', author);
-      } else { 
-        var svg = d3.select('#'+book)
-          .append('svg')
-          .attr('width', width)
-          .attr('height', height/2)
-          .attr('class', author);
-      }
 
+      (book === 'together') ? svg.attr('height', height) : svg.attr('height', height/2);
 
       d3.text(filename, function(error, text){
 
