@@ -72,7 +72,7 @@ var DRAW = (function(){
 
     clearInt: function(author) {
       clearInterval(this['to'][author]);
-      DRAW['to'][author] = undefined;
+      this['to'][author] = undefined;
     }
 
   }
