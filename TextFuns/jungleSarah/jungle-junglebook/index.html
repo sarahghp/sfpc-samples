@@ -8,14 +8,18 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="js/draw.js"></script>
-  <script src="../js/vendor/google-analytics.js" async></script>
+ <!-- <script src="../js/vendor/google-analytics.js" async></script> -->
 </head>
 <body>
-	<div id="jungle"></div>
-  <div><span id="jungle-word"></span></div>
-  <div id="junglebook">
-    <span class="legend">The Jungle vs The Jungle Book</span>
+	<div id="jungle">
+    <span id="jungle-word"></span>
   </div>
-  <div><span id="junglebook-word"></span></div>
+  <div id="junglebook">
+    <span id="junglebook-word"></span>
+  </div>
+  <div id="together">
+    <span id="together-word"></span>
+  </div>
+  <span class="legend"><a href="javascript:void(0)" id="apart-link" class="selected">The Jungle vs The Jungle Book</a>  |  <a href="javascript:void(0)" id="together-link">The Jungle + The Jungle Book</a> </span>
 </body>
 </html>

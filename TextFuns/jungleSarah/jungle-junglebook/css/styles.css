@@ -1,5 +1,6 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto+Slab:400,300,100,700);
-body {
+body,
+a {
   margin: 0;
   font-family: 'Roboto Slab';
   font-size: 60px;
@@ -7,26 +8,44 @@ body {
   letter-spacing: 2px;
   color: white;
 }
+a {
+  font-size: 10px;
+  text-decoration: none;
+}
+a:hover,
+a:focus,
+a:active,
+a.selected {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+}
 #jungle,
 #junglebook {
   margin: 0;
 }
 #jungle-word,
-#junglebook-word {
+#junglebook-word,
+#together-word {
   position: absolute;
   width: 100%;
   text-align: center;
+  display: block;
 }
 #jungle-word {
   top: 20%;
 }
 #junglebook-word {
   top: 70%;
-  width: 100%;
+}
+#together-word {
+  top: 40%;
+}
+.hidden {
+  display: none;
 }
 .legend {
   position: absolute;
-  bottom: 20px;
+  top: 20px;
   left: 10px;
   font-size: 10px;
+  z-index: 2;
 }
