@@ -17,12 +17,17 @@
 
 <grammar>
   start             = program
-  program           = string / number / id
+  program           = operation / string / number / id
 
 
-  string            = quote str:(mandatory_space/letter)+ quote { return str; }
-  id                = l:letter+ { return { type: 'assignment', id: l[0].join("") } ; }
-  letter            = [^" \n]+
+  operation         = space '(' space o:operator space lh:program space rh:program+ space ')' space 
+                      { return {operator: o, 'left': lh, right: rh }}
+  operator          = '>'/'<'/'+'/'-'/'*'/'if'/'let'/'print'
+
+
+  string            = quote str:(mandatory_space/letter)+ quote { return str.join("") ; }
+  id                = l:letter+ { return { type: 'assignment', id: l.join("") } ; }
+  letter            = [^" \n]
 
   number            = d:digit+ space { return +(d.join(''));  }
   digit             = [0123456789.-]
