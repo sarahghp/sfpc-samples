@@ -16,7 +16,17 @@
 <title>Language</title>
 
 <grammar>
-  start   = .
+  start             = program
+  program           = bareNumber 
+
+
+  
+  bareNumber        = d:digit+ space { return +(d.join(''));  }
+  digit             = [0123456789.-]+ 
+
+  space             = [ \n]* / !. { return undefined }
+  mandatory_space   = [ \n]+ / !. { return undefined }
+
 </grammar>
 
 <h3>Numbers</h3>
