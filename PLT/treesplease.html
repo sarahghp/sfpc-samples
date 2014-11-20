@@ -17,15 +17,21 @@
 
 <grammar>
   start             = program
-  program           = bareNumber 
+  program           = string / number / word
 
 
-  
-  bareNumber        = d:digit+ space { return +(d.join(''));  }
+  string            = quote space w:word+ quote { return w.join(''); }
+  word              = l:letter+ space { return l.join(''); }
+  letter            = [^" ]+
+
+  number            = d:digit+ space { return +(d.join(''));  }
   digit             = [0123456789.-]
 
   space             = [ \n]* / !. { return undefined }
   mandatory_space   = [ \n]+ / !. { return undefined }
+
+  quote             = ["]
+  singleQ           = [']
 
 </grammar>
 
