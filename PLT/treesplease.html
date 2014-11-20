@@ -16,17 +16,21 @@
 <title>Language</title>
 
 <grammar>
-  start             = program
-  program           = operation / string / number / id
+  start             = program / id
+  program           = scope / operation / string / number
+
+  scope             = space '(' space 'let' space '(' space i:id space a:string space ')' space ar:args+ space ')'
+                      {return { let: i, val: a, args: ar  } }
+  args              = '(' n:[^()]+ ')' {return '(' + n.join("") + ')'}
 
 
-  operation         = space '(' space o:operator space lh:program space rh:program+ space ')' space 
-                      { return {operator: o, 'left': lh, right: rh }}
-  operator          = '>'/'<'/'+'/'-'/'*'/'if'/'let'/'print'
+  operation         = space '(' space o:operator space lh:program space rh:program* space ')' space 
+                      { return {operator: o, 'left': lh, right: rh.length ? rh : undefined }}
+  operator          = '>'/'<'/'+'/'-'/'*'/'if'/'let'/'print'/id
 
 
   string            = quote str:(mandatory_space/letter)+ quote { return str.join("") ; }
-  id                = l:letter+ { return { type: 'assignment', id: l.join("") } ; }
+  id                = l:letter+ { return { operator: 'assignment', id: l.join("") } ; }
   letter            = [^" \n]
 
   number            = d:digit+ space { return +(d.join(''));  }
@@ -35,8 +39,7 @@
   space             = [ \n]* / !. { return undefined }
   mandatory_space   = [ \n]+ / !. { return undefined }
 
-  quote             = ["]
-  singleQ           = [']
+  quote             = ["']
 
 </grammar>
 
@@ -69,4 +72,4 @@
 <code>(< (+ 1 2) (+ 8 (* 3 (+ 8 (* 3 (+ 8 (* 3 4)))))))</code>
 <code>(if (< 20 10) 55 22)</code>
 <code>(if (< 20 10) (print "less!") (print "more!"))</code>
-<code>(let (name "SFPC") (print name))</code>
+<code>(let (name "SFPC") (print name)(eat pie))</code>
