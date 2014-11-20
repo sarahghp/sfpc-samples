@@ -22,7 +22,7 @@
 
   
   bareNumber        = d:digit+ space { return +(d.join(''));  }
-  digit             = [0123456789.-]+ 
+  digit             = [0123456789.-]
 
   space             = [ \n]* / !. { return undefined }
   mandatory_space   = [ \n]+ / !. { return undefined }
