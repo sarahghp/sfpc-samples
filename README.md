@@ -7,3 +7,7 @@ Tech used includes:
   * Nodebox
   * PLT
   * Python
+
+Related repos:
+ * [oF sketches](https://github.com/sarahgp/oFSketches)
+ * [data-monster](https://github.com/sarahgp/data-monster)
