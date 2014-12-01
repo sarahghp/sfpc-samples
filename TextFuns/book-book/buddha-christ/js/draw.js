@@ -7,9 +7,9 @@ var DRAW = (function(){
         height = window.innerHeight;
 
       var colors = {
-        'sinclair': 'hsla(182, 8%, 17%, 1)',
-        'kipling': 'hsla(122, 100%, 21%, 1)',
-        'both': 'hsla(233, 47%, 21%, 1)'
+        'dante': 'hsla(0, 87%, 41%, 1)',
+        'hesse': 'hsla(54, 96%, 42%, 1)',
+        'both': 'hsla(27, 96%, 51%, 1)'
       };
 
       d3.select('.'+author).remove();
@@ -57,8 +57,8 @@ var DRAW = (function(){
     },
 
     'to': {
-      'kipling': undefined,
-      'sinclair': undefined,
+      'hesse': undefined,
+      'dante': undefined,
       'both': undefined
     },
 
@@ -75,15 +75,15 @@ var DRAW = (function(){
 
 
 $(document).ready(function(){
-  DRAW.draw('data/_sinclairSorted.csv', 'sinclair', 'jungle');
-  DRAW.draw('data/_kiplingSorted.csv', 'kipling', 'junglebook');
+  DRAW.draw('data/_danteSorted.csv', 'dante', 'inferno');
+  DRAW.draw('data/_hesseSorted.csv', 'hesse', 'siddhartha');
 
 
   $('#together-link').on('click', function(){
     console.log(DRAW.to);
-    $('#jungle, #junglebook').addClass('hidden');
-    DRAW.clearInt('kipling');
-    DRAW.clearInt('sinclair');
+    $('#inferno, #siddhartha').addClass('hidden');
+    DRAW.clearInt('hesse');
+    DRAW.clearInt('dante');
 
     $('#together').removeClass('hidden');
     DRAW.draw('data/_sharedSorted.csv', 'both', 'together');
@@ -91,12 +91,12 @@ $(document).ready(function(){
 
   $('#apart-link').on('click', function(){
     console.log(DRAW.to);
-    $('#jungle, #junglebook').removeClass('hidden');
+    $('#inferno, #siddhartha').removeClass('hidden');
     DRAW.clearInt('both');
     
     $('#together').addClass('hidden');
-    DRAW.draw('data/_sinclairSorted.csv', 'sinclair', 'jungle');
-    DRAW.draw('data/_kiplingSorted.csv', 'kipling', 'junglebook');
+    DRAW.draw('data/_danteSorted.csv', 'dante', 'inferno');
+    DRAW.draw('data/_hesseSorted.csv', 'hesse', 'siddhartha');
   });
 
   $('.legend').on('click', 'a', function(){

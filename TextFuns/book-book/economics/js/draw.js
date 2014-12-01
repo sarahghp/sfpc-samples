@@ -3,12 +3,13 @@ var DRAW = (function(){
 
   return {
     draw: function (filename, author, book) {
+      console.log(filename);
       var width = window.innerWidth,
         height = window.innerHeight;
 
       var colors = {
-        'sinclair': 'hsla(182, 8%, 17%, 1)',
-        'kipling': 'hsla(122, 100%, 21%, 1)',
+        'marx': 'hsla(0, 87%, 41%, 1)',
+        'smith': 'hsla(182, 8%, 17%, 1)',
         'both': 'hsla(233, 47%, 21%, 1)'
       };
 
@@ -57,8 +58,8 @@ var DRAW = (function(){
     },
 
     'to': {
-      'kipling': undefined,
-      'sinclair': undefined,
+      'smith': undefined,
+      'marx': undefined,
       'both': undefined
     },
 
@@ -75,28 +76,26 @@ var DRAW = (function(){
 
 
 $(document).ready(function(){
-  DRAW.draw('data/_sinclairSorted.csv', 'sinclair', 'jungle');
-  DRAW.draw('data/_kiplingSorted.csv', 'kipling', 'junglebook');
+  DRAW.draw('data/_marxSorted.csv', 'marx', 'communist');
+  DRAW.draw('data/_smithSorted.csv', 'smith', 'wealth');
 
 
   $('#together-link').on('click', function(){
-    console.log(DRAW.to);
-    $('#jungle, #junglebook').addClass('hidden');
-    DRAW.clearInt('kipling');
-    DRAW.clearInt('sinclair');
+    $('#communist, #wealth').addClass('hidden');
+    DRAW.clearInt('smith');
+    DRAW.clearInt('marx');
 
     $('#together').removeClass('hidden');
     DRAW.draw('data/_sharedSorted.csv', 'both', 'together');
   });
 
   $('#apart-link').on('click', function(){
-    console.log(DRAW.to);
-    $('#jungle, #junglebook').removeClass('hidden');
+    $('#communist, #wealth').removeClass('hidden');
     DRAW.clearInt('both');
     
     $('#together').addClass('hidden');
-    DRAW.draw('data/_sinclairSorted.csv', 'sinclair', 'jungle');
-    DRAW.draw('data/_kiplingSorted.csv', 'kipling', 'junglebook');
+    DRAW.draw('data/_marxSorted.csv', 'marx', 'communist');
+    DRAW.draw('data/_smithSorted.csv', 'smith', 'wealth');
   });
 
   $('.legend').on('click', 'a', function(){
