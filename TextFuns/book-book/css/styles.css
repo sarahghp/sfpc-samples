@@ -23,7 +23,9 @@ a.selected {
 #communist,
 #wealth,
 #inferno,
-#siddhartha {
+#siddhartha,
+#anne,
+#etiquette {
   margin: 0;
 }
 #jungle-word,
@@ -32,6 +34,8 @@ a.selected {
 #wealth-word,
 #inferno-word,
 #siddhartha-word,
+#anne-word,
+#etiquette-word,
 #together-word {
   position: absolute;
   width: 100%;
@@ -40,12 +44,14 @@ a.selected {
 }
 #jungle-word,
 #communist-word,
-#inferno-word {
+#inferno-word,
+#anne-word {
   top: 20%;
 }
 #junglebook-word,
 #wealth-word,
-#siddhartha-word {
+#siddhartha-word,
+#etiquette-word {
   top: 70%;
 }
 #together-word {

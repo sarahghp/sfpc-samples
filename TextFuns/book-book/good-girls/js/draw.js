@@ -7,8 +7,8 @@ var DRAW = (function(){
         height = window.innerHeight;
 
       var colors = {
-        'sinclair': 'hsla(182, 8%, 17%, 1)',
-        'kipling': 'hsla(122, 100%, 21%, 1)',
+        'montgomery': 'hsla(27, 96%, 51%, 1)',
+        'hartley': 'hsla(122, 100%, 21%, 1)',
         'both': 'hsla(233, 47%, 21%, 1)'
       };
 
@@ -57,8 +57,8 @@ var DRAW = (function(){
     },
 
     'to': {
-      'kipling': undefined,
-      'sinclair': undefined,
+      'hartley': undefined,
+      'montgomery': undefined,
       'both': undefined
     },
 
@@ -75,15 +75,15 @@ var DRAW = (function(){
 
 
 $(document).ready(function(){
-  DRAW.draw('data/_sinclairSorted.csv', 'sinclair', 'jungle');
-  DRAW.draw('data/_kiplingSorted.csv', 'kipling', 'junglebook');
+  DRAW.draw('data/_montgomerySorted.csv', 'montgomery', 'anne');
+  DRAW.draw('data/_hartleySorted.csv', 'hartley', 'etiquette');
 
 
   $('#together-link').on('click', function(){
     console.log(DRAW.to);
-    $('#jungle, #junglebook').addClass('hidden');
-    DRAW.clearInt('kipling');
-    DRAW.clearInt('sinclair');
+    $('#anne, #etiquette').addClass('hidden');
+    DRAW.clearInt('hartley');
+    DRAW.clearInt('montgomery');
 
     $('#together').removeClass('hidden');
     DRAW.draw('data/_sharedSorted.csv', 'both', 'together');
@@ -91,12 +91,12 @@ $(document).ready(function(){
 
   $('#apart-link').on('click', function(){
     console.log(DRAW.to);
-    $('#jungle, #junglebook').removeClass('hidden');
+    $('#anne, #etiquette').removeClass('hidden');
     DRAW.clearInt('both');
     
     $('#together').addClass('hidden');
-    DRAW.draw('data/_sinclairSorted.csv', 'sinclair', 'jungle');
-    DRAW.draw('data/_kiplingSorted.csv', 'kipling', 'junglebook');
+    DRAW.draw('data/_montgomerySorted.csv', 'montgomery', 'anne');
+    DRAW.draw('data/_hartleySorted.csv', 'hartley', 'etiquette');
   });
 
   $('.legend').on('click', 'a', function(){
