@@ -1,8 +1,8 @@
-with open ('jungle.txt', 'r') as sinclairJungle:
-  sinclairWords = sinclairJungle.read()
+with open ('divine-hell.txt', 'r') as dante:
+  danteWords = dante.read()
 
-with open ('jungleBook.txt', 'r') as kiplingJungle:
-  kiplingWords = kiplingJungle.read()
+with open ('siddhartha.txt', 'r') as hesse:
+  hesseWords = hesse.read()
 
 with open ('stopwords.txt', 'r') as stop:
   stopwords = stop.read()
@@ -34,9 +34,9 @@ def cleanWords (toClean):
 
   return superCleanWords
 
-sinclairWords = cleanWords(sinclairWords)
-kiplingWords = cleanWords(kiplingWords)
-sharedWords = intersect(sinclairWords, kiplingWords)
+danteWords = cleanWords(danteWords)
+hesseWords = cleanWords(hesseWords)
+sharedWords = intersect(danteWords, hesseWords)
 
 def generateUniquesFile (text, title):
 
@@ -58,6 +58,6 @@ def generateUniquesFile (text, title):
 
   outputFile.close()
 
-generateUniquesFile(sinclairWords, 'sinclair')
-generateUniquesFile(kiplingWords, 'kipling')
+generateUniquesFile(danteWords, 'dante')
+generateUniquesFile(hesseWords, 'hesse')
 generateUniquesFile(sharedWords, 'shared')
