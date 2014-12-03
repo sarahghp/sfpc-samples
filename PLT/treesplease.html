@@ -10,7 +10,25 @@
   // uncomment next line to enable refresh
   // PLT.refresh = true
 
-  // write helper functions and semantics here
+  var evaluate = function(ast){
+
+  };
+
+   /*
+   * run code
+   * this takes as input a javascript string representing code in your laguage,
+   * parses it using the grammar you provided to the PLT framework, then acts
+   * on it using the zeval function above. 
+   */
+  
+  var run = function(source) {
+    var ast = PLT.parser.parse(source);
+    return evaluate(ast);
+  }
+  
+  // connect the REPL prompt in the browser to your language's run function
+  PLT.repl = run;
+
 </script>
 
 <title>Language</title>
