@@ -10,7 +10,26 @@
   // uncomment next line to enable refresh
   // PLT.refresh = true
 
+  var dict = {
+    '+': infix;
+  };
+
+  function infix(operator, args) {
+    eval(args.join(operator));
+  };
+
   var evaluate = function(ast){
+
+    var unpacked = (function unpack (left, right){
+      var args = [];
+      args.push[left];
+      return args.concat(right);
+    })(ast.left, ast.right);
+
+    return dict[operator](operator, unpacked);
+
+
+
 
   };
 
