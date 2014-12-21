@@ -25,6 +25,7 @@ var DRAW = (function(){
 
         var n = 0,
             data = d3.csv.parseRows(text),
+            textLength = data[0].length,
             dataView = [data[0][n]];   
 
         svg.append('rect')
@@ -42,7 +43,7 @@ var DRAW = (function(){
           // Update data view
           
           n++;
-          n %= text.length;
+          n %= textLength;
 
           dataView = [data[0][n]];
 
