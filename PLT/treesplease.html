@@ -56,7 +56,6 @@
     var unpacked = (function unpack(left, right) {
 
       typeof left === 'object' && (left = evaluate(left));
-      // right && moveOverRight([], right);
       
       var args = [];
       args.push(left);
@@ -93,7 +92,7 @@
 
   scope             = space '(' space 'let' space '(' space i:id space a:string space ')' space ar:args+ space ')'
                       {return { let: i, val: a, args: ar  } }
-  args              = '(' n:[^()]+ ')' {return '(' + n.join("") + ')'}
+  args              = space '(' n:[^()]+ ')' space {return '(' + n.join("") + ')'}
 
 
   operation         = space '(' space o:operator space lh:program space rh:program* space ')' space 
@@ -145,4 +144,4 @@
 <code>(< (+ 1 2) (+ 8 (* 3 (+ 8 (* 3 (+ 8 (* 3 4)))))))</code>
 <code>(if (< 20 10) 55 22)</code>
 <code>(if (< 20 10) (print "less!") (print "more!"))</code>
-<code>(let (name "SFPC") (print name)(eat pie))</code>
+<code>(let (name "SFPC") (print name) (print "pie"))</code>
