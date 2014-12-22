@@ -24,20 +24,28 @@
 
   var evaluate = function(ast){
 
-    function moveOverRight(arr){
-      return evaluate(arr[0]);
+    function moveOverRight(currentArr, arr){
+      typeof arr[0] === 'object' ? currentArr.push(evaluate(arr[0])) : currentArr.push(arr[0]);
+      
+      var remainingArr = arr.slice(1);
+      
+      if (remainingArr.length > 0) { 
+        return moveOverRight(currentArr, remainingArr);
+      } else {
+        return currentArr;
+      }
+
     };
 
     var unpacked = (function unpack(left, right){
 
       typeof left === 'object' && (left = evaluate(left));
-      typeof right[0] === 'object' && (right = moveOverRight(right));
+      right = moveOverRight([], right);
       
-
       var args = [];
       args.push(left);
       return args.concat(right);
-      
+
     })(ast.left, ast.right);
 
     return dict[ast.operator](ast.operator, unpacked);
@@ -115,6 +123,7 @@
 <code>(+ 1 2 3 4 5)</code>
 <code>(< 5 6)</code>
 <code>(< 5 6 8 20 34)</code>
+<code>(+ 5 6 (+ 8 20) 34)</code>
 <code>(print "Hello, World!")</code>
 
 <h3>Nesting</h3>
