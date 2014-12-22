@@ -16,6 +16,7 @@
     '*': infix,
     '<': infix,
     '>': infix,
+    '=': comparison,
     'print': print,
     'if': conditional
   };
@@ -36,6 +37,11 @@
   function infix(operator, args) {
     args = moveOverArgs([], args);
     return eval(args.join(operator));
+  };
+
+  function comparison(operator, args) {
+    args = moveOverArgs([], args);
+    return eval(args.join('==='));
   };
 
   function print(operator, args) {
@@ -97,7 +103,7 @@
 
   operation         = space '(' space o:operator space lh:program space rh:program* space ')' space 
                       { return {operator: o, 'left': lh, right: rh.length ? rh : undefined }}
-  operator          = '>'/'<'/'+'/'-'/'*'/'if'/'let'/'print'/id
+  operator          = '>'/'<'/'+'/'-'/'*'/'='/'if'/'let'/'print'/id
 
 
   string            = quote str:(mandatory_space/letter)+ quote { return str.join("") ; }
@@ -138,6 +144,7 @@
 <code>(< 5 6 8 20 34)</code>
 <code>(+ 5 6 (+ 8 20) 34)</code>
 <code>(print "Hello, World!")</code>
+<code>(= (+ 1 2) (+ 3 4))</code>
 
 <h3>Nesting</h3>
 <code>(< (+ 1 2) 6)</code>
