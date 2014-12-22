@@ -15,11 +15,16 @@
     '-': infix,
     '*': infix,
     '<': infix,
-    '>': infix
+    '>': infix,
+    'print': print
   };
 
   function infix(operator, args) {
     return eval(args.join(operator));
+  };
+
+  function print(operator, args){
+    return ''+ args.slice(0, -1); // remove comma
   };
 
   var evaluate = function(ast){
@@ -40,7 +45,7 @@
     var unpacked = (function unpack(left, right){
 
       typeof left === 'object' && (left = evaluate(left));
-      right = moveOverRight([], right);
+      right && moveOverRight([], right);
       
       var args = [];
       args.push(left);
