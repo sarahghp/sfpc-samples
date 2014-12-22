@@ -16,10 +16,26 @@
     '*': infix,
     '<': infix,
     '>': infix,
-    'print': print
+    'print': print,
+    'if': conditional
+  };
+
+  function moveOverArgs(currentArr, arr){
+    typeof arr[0] === 'object' ? currentArr.push(evaluate(arr[0])) : currentArr.push(arr[0]);
+    
+    var remainingArr = arr.slice(1);
+    
+    if (remainingArr.length > 0) { 
+      return moveOverArgs(currentArr, remainingArr);
+    } else {
+      console.log(currentArr);
+      return currentArr;
+    }
+
   };
 
   function infix(operator, args) {
+    args = moveOverArgs([], args);
     return eval(args.join(operator));
   };
 
@@ -27,25 +43,22 @@
     return ''+ args.slice(0, -1); // remove comma
   };
 
+  function conditional(operator, args){
+    console.log(args);  
+    if (args[0]){
+      return evaluate(args[1]);
+    } else {
+      return evaluate(args[2]);
+    }
+  };
+
+
   var evaluate = function(ast){
-
-    function moveOverRight(currentArr, arr){
-      typeof arr[0] === 'object' ? currentArr.push(evaluate(arr[0])) : currentArr.push(arr[0]);
-      
-      var remainingArr = arr.slice(1);
-      
-      if (remainingArr.length > 0) { 
-        return moveOverRight(currentArr, remainingArr);
-      } else {
-        return currentArr;
-      }
-
-    };
 
     var unpacked = (function unpack(left, right){
 
       typeof left === 'object' && (left = evaluate(left));
-      right && moveOverRight([], right);
+      // right && moveOverRight([], right);
       
       var args = [];
       args.push(left);
