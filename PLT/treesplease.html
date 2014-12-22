@@ -24,21 +24,23 @@
 
   var evaluate = function(ast){
 
-    var operator = ast.operator,
-        left     = ast.left,
-        right    = ast.right;
+    function moveOverRight(arr){
+      return evaluate(arr[0]);
+    };
 
-    var unpacked = (function unpack (left, right){
+    var unpacked = (function unpack(left, right){
 
       typeof left === 'object' && (left = evaluate(left));
-      console.log(right);
+      typeof right[0] === 'object' && (right = moveOverRight(right));
+      
 
       var args = [];
       args.push(left);
       return args.concat(right);
+      
     })(ast.left, ast.right);
 
-    return dict[operator](operator, unpacked);
+    return dict[ast.operator](ast.operator, unpacked);
 
 
 
