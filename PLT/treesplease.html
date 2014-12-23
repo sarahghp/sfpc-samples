@@ -21,6 +21,8 @@
     'if': conditional
   };
 
+  var vars = { }; // to hold any vars declared with let
+
   function moveOverArgs(currentArr, arr) {
     typeof arr[0] === 'object' ? currentArr.push(evaluate(arr[0])) : currentArr.push(arr[0]);
     
@@ -54,6 +56,10 @@
     } else {
       return evaluate(args[2]);
     }
+  };
+
+  function let(operator, args) {
+
   };
 
 
@@ -97,7 +103,7 @@
   program           = scope / operation / string / number
 
   scope             = space '(' space 'let' space '(' space i:id space a:string space ')' space ar:args+ space ')'
-                      {return { let: i, val: a, args: ar  } }
+                      {return { operator: 'let', left: {operator: 'assignment', left: i, right: a }, right: ar  } }
   args              = space '(' n:[^()]+ ')' space {return '(' + n.join("") + ')'}
 
 
@@ -107,7 +113,7 @@
 
 
   string            = quote str:(mandatory_space/letter)+ quote { return str.join("") ; }
-  id                = l:letter+ { return { operator: 'assignment', id: l.join("") } ; }
+  id                = l:letter+ { return l.join("")  ; }
   letter            = [^" \n]
 
   number            = d:digit+ space { return +(d.join(''));  }
