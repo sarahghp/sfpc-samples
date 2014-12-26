@@ -46,18 +46,18 @@
         
         for (var i=0, l=keys.length; i < l; i++){
           testKey = keys[i];
-          console.log("TK: ", testKey);
+          // console.log("TK: ", testKey);
           testValue = vars[testKey];
-          console.log("TV: " + testValue);
-          console.log("TestBuddy:", testBuddy);
+          // console.log("TV: " + testValue);
+          // console.log("TestBuddy:", testBuddy);
           testBuddy = testBuddy.replace(testKey, '"' + testValue + '"');
-          console.log(testBuddy);
+          // console.log(testBuddy);
         }
     console.log(testBuddy);
 
     // does testBuddy include any key in vars? if yes, replace with value. then parse. then evaluate. 
     var ast = PLT.parser.parse(testBuddy);
-    console.log(ast);
+    return ast;
 
   }
 
@@ -86,7 +86,7 @@
   function let(operator, args) {
     console.log(operator, args);
     args = moveOverAssignment([], args.slice(1)); // first arg from let returns undefined 
-    // return evaluate(args);
+    return evaluate(args);
   };
 
   function assignment(operator, args) {
