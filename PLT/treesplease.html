@@ -18,7 +18,9 @@
     '>': infix,
     '=': comparison,
     'print': print,
-    'if': conditional
+    'if': conditional,
+    'let': let,
+    'assignment': assignment
   };
 
   var vars = { }; // to hold any vars declared with let
@@ -35,6 +37,29 @@
     }
 
   };
+
+  function moveOverAssignment(currentArr, arr){
+    console.log(arr);
+    var testBuddy = arr[0],
+        keys = Object.keys(vars),
+        testKey, testValue;
+        
+        for (var i=0, l=keys.length; i < l; i++){
+          testKey = keys[i];
+          console.log("TK: ", testKey);
+          testValue = vars[testKey];
+          console.log("TV: " + testValue);
+          console.log("TestBuddy:", testBuddy);
+          testBuddy = testBuddy.replace(testKey, '"' + testValue + '"');
+          console.log(testBuddy);
+        }
+    console.log(testBuddy);
+
+    // does testBuddy include any key in vars? if yes, replace with value. then parse. then evaluate. 
+    var ast = PLT.parser.parse(testBuddy);
+    console.log(ast);
+
+  }
 
   function infix(operator, args) {
     args = moveOverArgs([], args);
@@ -59,8 +84,16 @@
   };
 
   function let(operator, args) {
-
+    console.log(operator, args);
+    args = moveOverAssignment([], args.slice(1)); // first arg from let returns undefined 
+    // return evaluate(args);
   };
+
+  function assignment(operator, args) {
+    vars[args[0]] = args[1];
+    console.log(vars[args[0]]);
+  };
+
 
 
   var evaluate = function(ast) {
@@ -102,19 +135,20 @@
   start             = program / id
   program           = scope / operation / string / number
 
-  scope             = space '(' space 'let' space '(' space i:id space a:string space ')' space ar:args+ space ')'
-                      {return { operator: 'let', left: {operator: 'assignment', left: i, right: a }, right: ar  } }
+  scope             = space '(' space 'let' space '(' space i:id space a:string space ')' space ar:args* space ')'
+                      {return { operator: 'let', left: { operator: 'assignment', left: i.left, right: a }, right: ar  } }
   args              = space '(' n:[^()]+ ')' space {return '(' + n.join("") + ')'}
 
 
-  operation         = space '(' space o:operator space lh:program space rh:program* space ')' space 
+  operation         = space '(' space o:operator space lh:start space rh:program* space ')' space 
                       { return {operator: o, 'left': lh, right: rh.length ? rh : undefined }}
   operator          = '>'/'<'/'+'/'-'/'*'/'='/'if'/'let'/'print'/id
 
 
   string            = quote str:(mandatory_space/letter)+ quote { return str.join("") ; }
-  id                = l:letter+ { return l.join("")  ; }
+  id                = t:text+ { return {operator: 'assignment', left: t.join("") } ; }
   letter            = [^" \n]
+  text              = [a-zA-Z-]
 
   number            = d:digit+ space { return +(d.join(''));  }
   digit             = [0123456789.-]
