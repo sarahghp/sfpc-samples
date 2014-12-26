@@ -39,6 +39,9 @@
   };
 
   function moveOverAssignment(currentArr, arr){
+
+    // for each item in the array, replace any instance of any vars, 
+
     console.log(arr);
     var testBuddy = arr[0],
         keys = Object.keys(vars),
@@ -53,11 +56,14 @@
           testBuddy = testBuddy.replace(testKey, '"' + testValue + '"');
           // console.log(testBuddy);
         }
-    console.log(testBuddy);
-
-    // does testBuddy include any key in vars? if yes, replace with value. then parse. then evaluate. 
+    // console.log(testBuddy);
+ 
     var ast = PLT.parser.parse(testBuddy);
-    return ast;
+    return evaluate(ast);
+
+  }
+
+  function replaceVars(){
 
   }
 
@@ -84,14 +90,14 @@
   };
 
   function let(operator, args) {
-    console.log(operator, args);
-    args = moveOverAssignment([], args.slice(1)); // first arg from let returns undefined 
-    return evaluate(args);
+    // console.log(operator, args);
+    return moveOverAssignment([], args.slice(1)); // first arg from let returns undefined 
+    // return evaluate(args); // TODO: evaluate all args
   };
 
   function assignment(operator, args) {
     vars[args[0]] = args[1];
-    console.log(vars[args[0]]);
+    // console.log(vars[args[0]]);
   };
 
 
