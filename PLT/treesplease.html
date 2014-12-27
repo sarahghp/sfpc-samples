@@ -29,14 +29,12 @@
     typeof arr[0] === 'object' ? currentArr.push(evaluate(arr[0])) : currentArr.push(arr[0]);
     
     var remainingArr = arr.slice(1);
-    
     if (remainingArr.length > 0) { 
       return moveOverArgs(currentArr, remainingArr);
     } else {
       return currentArr;
     }
-
-  };
+  }
 
   function moveOverAssignment(currentArr, arr){
 
@@ -45,7 +43,6 @@
     currentArr.push(evaluate(PLT.parser.parse(expression)));
 
     var remainingArr = arr.slice(1);
-
     if (remainingArr.length > 0){
       return moveOverAssignment(currentArr, remainingArr);
     } else {
@@ -57,7 +54,6 @@
 
     var key = keys[0];
     expression = expression.replace(key, '"' + vars[key] + '"');
-
 
     var remainingKeys = keys.slice(1);
     if (remainingKeys.length > 0){
@@ -87,17 +83,15 @@
     } else {
       return evaluate(args[2]);
     }
-  };
+  }
 
   function let(operator, args) {
     return moveOverAssignment([], args.slice(1)); // first arg from let returns undefined 
-  };
+  }
 
   function assignment(operator, args) {
     vars[args[0]] = args[1];
-  };
-
-
+  }
 
   var evaluate = function(ast) {
 
