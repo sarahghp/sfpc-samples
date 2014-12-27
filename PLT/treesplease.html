@@ -40,18 +40,17 @@
 
   function moveOverAssignment(currentArr, arr){
 
-    for (var i = 0, l = arr.length; i < l; i++){
-      var expression = arr[i],
-          keys = Object.keys(vars),
-          key, value;
+    var expression = arr[0];
+    expression = replaceVars(expression, Object.keys(vars));
+    currentArr.push(evaluate(PLT.parser.parse(expression)));
 
-      expression = replaceVars(expression, Object.keys(vars));
-      
-      arr[i] = evaluate(PLT.parser.parse(expression));
+    var remainingArr = arr.slice(1);
+
+    if (remainingArr.length > 0){
+      return moveOverAssignment(currentArr, remainingArr);
+    } else {
+      return currentArr.join(", ");
     }
-
-    return arr.join(", ");
-
   }
 
   function replaceVars(expression, keys){
