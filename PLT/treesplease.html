@@ -40,31 +40,32 @@
 
   function moveOverAssignment(currentArr, arr){
 
-    // for each item in the array, replace any instance of any vars, 
+    for (var i = 0, l = arr.length; i < l; i++){
+      var expression = arr[i],
+          keys = Object.keys(vars),
+          key, value;
 
-    console.log(arr);
-    var testBuddy = arr[0],
-        keys = Object.keys(vars),
-        testKey, testValue;
-        
-        for (var i=0, l=keys.length; i < l; i++){
-          testKey = keys[i];
-          // console.log("TK: ", testKey);
-          testValue = vars[testKey];
-          // console.log("TV: " + testValue);
-          // console.log("TestBuddy:", testBuddy);
-          testBuddy = testBuddy.replace(testKey, '"' + testValue + '"');
-          // console.log(testBuddy);
-        }
-    // console.log(testBuddy);
- 
-    var ast = PLT.parser.parse(testBuddy);
-    return evaluate(ast);
+      expression = replaceVars(expression, Object.keys(vars));
+      
+      arr[i] = evaluate(PLT.parser.parse(expression));
+    }
+
+    return arr.join(", ");
 
   }
 
-  function replaceVars(){
+  function replaceVars(expression, keys){
 
+    var key = keys[0];
+    expression = expression.replace(key, '"' + vars[key] + '"');
+
+
+    var remainingKeys = keys.slice(1);
+    if (remainingKeys.length > 0){
+      replaceVars(expression, remainingKeys);
+    } else {
+      return expression;
+    }
   }
 
   function infix(operator, args) {
@@ -90,14 +91,11 @@
   };
 
   function let(operator, args) {
-    // console.log(operator, args);
     return moveOverAssignment([], args.slice(1)); // first arg from let returns undefined 
-    // return evaluate(args); // TODO: evaluate all args
   };
 
   function assignment(operator, args) {
     vars[args[0]] = args[1];
-    // console.log(vars[args[0]]);
   };
 
 
