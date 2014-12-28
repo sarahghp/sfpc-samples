@@ -57,10 +57,17 @@
 
     var remainingKeys = keys.slice(1);
     if (remainingKeys.length > 0){
-      replaceVars(expression, remainingKeys);
+      return replaceVars(expression, remainingKeys);
     } else {
       return expression;
     }
+  }
+
+  function unpackAssignment(assignmentArr){
+    for (var i=0; i < assignmentArr.length; i++){
+      assignment(assignmentArr[i].left, assignmentArr[i].right);
+    }
+    return true;
   }
 
   function infix(operator, args) {
@@ -86,17 +93,18 @@
   }
 
   function let(operator, args) {
-    return moveOverAssignment([], args.slice(1)); // first arg from let returns undefined 
+    return moveOverAssignment([], args.slice(1)); // first arg from let returns true 
   }
 
-  function assignment(operator, args) {
-    vars[args[0]] = args[1];
+  function assignment(a, b) {
+    vars[a] = b;
   }
 
   var evaluate = function(ast) {
 
     var unpacked = (function unpack(left, right) {
 
+      left instanceof Array && (left = unpackAssignment(left));
       typeof left === 'object' && (left = evaluate(left));
       
       var args = [];
@@ -130,10 +138,10 @@
 
 <grammar>
   start             = program / id
-  program           = scope / operation / string / number
+  program           = scope / assignment / operation / string / number
 
-  scope             = space '(' space 'let' space '(' space i:id space a:string space ')' space ar:args* space ')'
-                      {return { operator: 'let', left: { operator: 'assignment', left: i.left, right: a }, right: ar  } }
+  scope             = space '(' space 'let' space as:assignment+ space ar:args* space ')'
+                      {return { operator: 'let', left: as, right: ar  } }
   args              = space '(' n:[^()]+ ')' space {return '(' + n.join("") + ')'}
 
 
@@ -143,7 +151,10 @@
 
 
   string            = quote str:(mandatory_space/letter)+ quote { return str.join("") ; }
-  id                = t:text+ { return {operator: 'assignment', left: t.join("") } ; }
+  assignment        = space '[' space i:id space s:string space ']' space 
+                      { return { operator: 'assignment', left:i, right: s }; }
+
+  id                = t:text+ { return t.join(""); }
   letter            = [^" \n]
   text              = [a-zA-Z-]
 
@@ -188,4 +199,5 @@
 <code>(< (+ 1 2) (+ 8 (* 3 (+ 8 (* 3 (+ 8 (* 3 4)))))))</code>
 <code>(if (< 20 10) 55 22)</code>
 <code>(if (< 20 10) (print "less!") (print "more!"))</code>
-<code>(let (name "SFPC") (print name) (print "pie"))</code>
+<code>(let [name "SFPC"] (print name) (print "pie"))</code>
+<code>(let [name "SFPC"] [tiger "elephant"] (print name) (print "pie") (print tiger))</code>
