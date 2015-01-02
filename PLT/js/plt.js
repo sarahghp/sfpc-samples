@@ -79,7 +79,7 @@ $(function() {
         var expectedValue = goods[i].attributes.getNamedItem('expect').value;
 
         // Create a regEx from the expectedValue
-        var re = new RegExp(expectedValue, "");
+        var re = new RegExp('^'+ expectedValue + '$', '');
 
         // Validate that the expected value matches the returned value
         if(!str.match(re)){
