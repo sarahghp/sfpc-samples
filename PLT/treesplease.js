@@ -1,17 +1,40 @@
-var dict = {
-  '+': infix,
-  '-': infix,
-  '*': infix,
-  '<': infix,
-  '>': infix,
-  '=': comparison,
-  'print': print,
+// Access functions & scope
+
+var specialForms = {
   'if': conditional,
   'let': let,
   'assignment': assignment
 };
 
-var vars = { }; // to hold any vars declared with let
+
+var builtIns = {
+  '+': this.infix,
+  '-': this.infix,
+  '*': this.infix,
+  '<': this.infix,
+  '>': this.infix,
+
+  '=': function (operator, args) {
+    args = moveOverArgs([], args);
+    return eval(args.join('==='));
+  },
+  
+  'infix': function (operator, args) {
+    args = moveOverArgs([], args);
+    return eval(args.join(operator));
+  },
+
+  'print': function (operator, args) {
+    return ''+ args.slice(0, -1); // remove comma
+  },
+
+
+
+};
+
+var scopes = { }; // to hold any created scopes
+
+// Utility functions
 
 function moveOverArgs(currentArr, arr) {
   typeof arr[0] === 'object' ? currentArr.push(evaluate(arr[0])) : currentArr.push(arr[0]);
@@ -58,20 +81,6 @@ function unpackAssignment(assignmentArr){
   return true;
 }
 
-function infix(operator, args) {
-  args = moveOverArgs([], args);
-  return eval(args.join(operator));
-};
-
-function comparison(operator, args) {
-  args = moveOverArgs([], args);
-  return eval(args.join('==='));
-};
-
-function print(operator, args) {
-  return ''+ args.slice(0, -1); // remove comma
-};
-
 function conditional(operator, args) { 
   if (args[0]){
     return evaluate(args[1]);
@@ -88,12 +97,34 @@ function assignment(a, b) {
   vars[a] = b;
 }
 
-var evaluate = function(ast) {
+// Evaluation
+
+var evaluate = function(ast, scope) {
+
+  var evaluator = 
+
 
   var unpacked = (function unpack(left, right) {
 
-    left instanceof Array && (left = unpackAssignment(left));
-    typeof left === 'object' && (left = evaluate(left));
+    if (ast.operator === 'let'){
+      left = unpackAssignment(left);
+    } else if (typeof left === 'object'){
+      left = evaluate(left);
+    } else {
+      left = left;
+    }
+
+    /* Other ways to write the above
+
+        1: Doesn't make clear that 0 or at most 1 will actually be evaluated but is shorter & prettier :D
+          ast.operator === 'let' && (left = unpackAssignment(left));
+          typeof left === 'object' && (left = evaluate(left));
+
+        2: Somewhat clearer but not a huge difference
+          left = left instanceof Array ?
+           unpackAssignment(left) : 
+           left
+    */
     
     var args = [];
     args.push(left);
@@ -105,17 +136,9 @@ var evaluate = function(ast) {
 
 };
 
- /*
- * run code
- * this takes as input a javascript string representing code in your laguage,
- * parses it using the grammar you provided to the PLT framework, then acts
- * on it using the functions above. 
- */
+// Run function
 
 var run = function(source) {
   var ast = PLT.parser.parse(source);
   return evaluate(ast);
 };
-
-// connect the REPL prompt in the browser to your language's run function
-// PLT.repl = run;
