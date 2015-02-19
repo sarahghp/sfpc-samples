@@ -75,7 +75,7 @@ function unpackAssignment(assignmentArr){
 }
 
 function conditional(operator, args) { 
-  if (args[0]){
+  if (evaluate(args[0])){
     return evaluate(args[1]);
   } else {
     return evaluate(args[2]);
@@ -99,6 +99,10 @@ function infix (operator, args) {
 
 var evaluate = function(ast, scope) {
 
+  if(!(ast && typeof ast === 'object')) {
+    return ast;
+  }
+
   // var unpacked = (function unpack(left, right) {
 
   //   if (ast.operator === 'let'){
@@ -120,7 +124,7 @@ var evaluate = function(ast, scope) {
       // builtIn = builtIns[ast.operator],
       func = scopes[scope][ast.operator];
 
-  // console.log(special, builtIn, scope);
+  console.log(ast.operator, scope, func);
 
   if (special) {
     return special(ast.operator, ast.expressions);
