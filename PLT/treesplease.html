@@ -31,7 +31,8 @@
                       { return { operator: 'assignment', expressions: [i, s]}; }
   
   string            = space quote str:(mandatory_space/letter)+ quote space { return str.join("") ; }
-  id                = t:text+ { return t.join(""); }
+  id                = r:raw_id { return {operator: 'var', expressions: r } }
+  raw_id            = t:text+ { return t.join(""); }
   letter            = [^" \n]
   text              = [a-zA-Z-]
 
