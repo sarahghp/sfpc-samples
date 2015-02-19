@@ -17,9 +17,8 @@
   start             = program / id
   program           = scope / assignment / operation / string / number
 
-  scope             = space '(' space 'let' space as:assignment+ space ar:start* l:let_end
-                      {return { operator: 'let', expressions: [as, ar, l]  } }
-  let_end           = mandatory_space pr:program+ ')' { return pr } / space ')' {return []}
+  scope             = space '(' space 'let' space as:assignment+ space ar:start* space pr:program* space ')'
+                      {return { operator: 'let', expressions: [as, ar, pr]  } }
 
 
   operation         = space '(' space o:operator space exp:start* ')' space 
