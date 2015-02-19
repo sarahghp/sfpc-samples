@@ -3,7 +3,8 @@
 var specialForms = {
   'if': conditional,
   'let': let,
-  'assignment': assignment
+  'assignment': assignment,
+  'var': lookup
 }
 
 var scopes = { 
@@ -22,6 +23,15 @@ var scopes = {
     
     'print': function (operator, args) {
       return args.join('');
+    },
+
+    'assignment': function (a, b) { // here as dispatched from let > evaluate
+        // iterate through array here or in move over?
+        scopes[a] = b;
+    }
+
+    'lookup': function(exp) { // here as dispatched from let > evaluate
+       // if there are two args it is an assignment, if not it is a retreival/lookup 
     }
   }
 
@@ -54,18 +64,18 @@ function moveOverAssignment(currentArr, arr){
   }
 }
 
-function replaceVars(expression, keys){
+// function replaceVars(expression, keys){
 
-  var key = keys[0];
-  expression = expression.replace(key, '"' + scopes[key] + '"');
+//   var key = keys[0];
+//   expression = expression.replace(key, '"' + scopes[key] + '"');
 
-  var remainingKeys = keys.slice(1);
-  if (remainingKeys.length > 0){
-    return replaceVars(expression, remainingKeys);
-  } else {
-    return expression;
-  }
-}
+//   var remainingKeys = keys.slice(1);
+//   if (remainingKeys.length > 0){
+//     return replaceVars(expression, remainingKeys);
+//   } else {
+//     return expression;
+//   }
+// }
 
 function unpackAssignment(assignmentArr){
   for (var i=0; i < assignmentArr.length; i++){
@@ -83,11 +93,17 @@ function conditional(operator, args) {
 }
 
 function let(operator, args) {
+  // flatten array 1 level
+  // dispatch args — if there are two args it is an assignment, if not it is a retreival/lookup <- put in lookup?
   return moveOverAssignment([], args.slice(1)); // first arg from let returns true 
 }
 
 function assignment(a, b) {
   scopes[a] = b;
+}
+
+function lookup(operator, args){
+  // find var, return it
 }
 
 function infix (operator, args) {
