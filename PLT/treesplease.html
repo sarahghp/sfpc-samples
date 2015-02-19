@@ -22,7 +22,7 @@
                       {return { operator: 'let', expressions: [as, ar, pr]  } }
 
 
-  operation         = space '(' space o:operator space exp:start* ')' space 
+  operation         = space '(' space o:operator space exp:start* space ')' space 
                       { return {operator: o, expressions: exp }}
   operator          = '>'/'<'/'+'/'-'/'*'/'='/'if'/'let'/'print'/id
 
@@ -30,7 +30,7 @@
   assignment        = space '[' space i:id space s:string space ']' space 
                       { return { operator: 'assignment', expressions: [i, s]}; }
   
-  string            = quote str:(mandatory_space/letter)+ quote { return str.join("") ; }
+  string            = space quote str:(mandatory_space/letter)+ quote space { return str.join("") ; }
   id                = t:text+ { return t.join(""); }
   letter            = [^" \n]
   text              = [a-zA-Z-]
@@ -69,6 +69,7 @@
 <code>(< 5 6 8 20 34)</code>
 <code>(+ 5 6 (+ 8 20) 34)</code>
 <code>(print "Hello, World!")</code>
+<code>(print "hey" "you")</code>
 <code>(= (+ 1 2) (+ 3 4))</code>
 
 <h3>Nesting</h3>

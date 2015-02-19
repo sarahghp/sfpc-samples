@@ -21,7 +21,7 @@ var scopes = {
     },
     
     'print': function (operator, args) {
-      return ''+ args.slice(0, -1); // remove comma
+      return args.join('');
     }
   }
 
