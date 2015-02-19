@@ -18,20 +18,20 @@
   program           = scope / assignment / operation / string / number
 
   scope             = space '(' space 'let' space as:assignment+ space ar:args* let_end
-                      {return { operator: 'let', left: as, right: ar  } }
+                      {return { operator: 'let', expressions: [as, ar]  } }
   args              = space '(' n:[^()]+ ')' space {return '(' + n.join("") + ')'}
   let_end           = mandatory_space program+ ')' / space ')'
 
 
-  operation         = space '(' space o:operator space lh:start space rh:program* space ')' space 
-                      { return {operator: o, 'left': lh, right: rh.length ? rh : undefined }}
+  operation         = space '(' space o:operator space exp:start* ')' space 
+                      { return {operator: o, expressions: exp }}
   operator          = '>'/'<'/'+'/'-'/'*'/'='/'if'/'let'/'print'/id
 
 
-  string            = quote str:(mandatory_space/letter)+ quote { return str.join("") ; }
   assignment        = space '[' space i:id space s:string space ']' space 
-                      { return { operator: 'assignment', left:i, right: s }; }
-
+                      { return { operator: 'assignment', expressions: [i, s]}; }
+  
+  string            = quote str:(mandatory_space/letter)+ quote { return str.join("") ; }
   id                = t:text+ { return t.join(""); }
   letter            = [^" \n]
   text              = [a-zA-Z-]
