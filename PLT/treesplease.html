@@ -17,9 +17,10 @@
   start             = program / id
   program           = scope / assignment / operation / string / number
 
-  scope             = space '(' space 'let' space as:assignment+ space ar:args* space ')'
+  scope             = space '(' space 'let' space as:assignment+ space ar:args* let_end
                       {return { operator: 'let', left: as, right: ar  } }
   args              = space '(' n:[^()]+ ')' space {return '(' + n.join("") + ')'}
+  let_end           = mandatory_space program+ ')' / space ')'
 
 
   operation         = space '(' space o:operator space lh:start space rh:program* space ')' space 
@@ -76,5 +77,10 @@
 <code>(< (+ 1 2) (+ 8 (* 3 (+ 8 (* 3 (+ 8 (* 3 4)))))))</code>
 <code>(if (< 20 10) 55 22)</code>
 <code>(if (< 20 10) (print "less!") (print "more!"))</code>
+
+<h3>Scope</h3>
 <code>(let [name "SFPC"] (print name) (print "pie"))</code>
 <code>(let [name "SFPC"] [tiger "elephant"] (print name) (print "pie") (print tiger))</code>
+<code>(let [name "SFPC"] (let [tiger "elephant"] (print name)) 1)</code>
+<code>(let [name "SFPC"] (let [tiger "elephant"] (print name)) "1")</code>
+<code>(let [name "SFPC"] (let [tiger "elephant"] (print name)) (print name))</code>
