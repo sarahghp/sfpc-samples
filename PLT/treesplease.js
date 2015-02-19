@@ -99,29 +99,16 @@ function infix (operator, args) {
 
 var evaluate = function(ast, scope) {
 
+  // Check first that on recursion we haven't just received a scalar value that can be returned
+
   if(!(ast && typeof ast === 'object')) {
     return ast;
   }
 
-  // var unpacked = (function unpack(left, right) {
-
-  //   if (ast.operator === 'let'){
-  //     left = unpackAssignment(left);
-  //   } else if (typeof left === 'object'){
-  //     left = evaluate(left);
-  //   } else {
-  //     left = left;
-  //   }
-
-  //   var args = [];
-  //   args.push(left);
-  //   return args.concat(right);
-
-  // })(ast.left, ast.right);
+  // Then set scope & evaluate
 
   var scope = scope || 'built-in',
       special = specialForms[ast.operator],
-      // builtIn = builtIns[ast.operator],
       func = scopes[scope][ast.operator];
 
   console.log(ast.operator, scope, func);
