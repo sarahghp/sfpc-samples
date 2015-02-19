@@ -6,25 +6,26 @@ var specialForms = {
   'assignment': assignment
 }
 
-var builtIns = {
-  '+': infix,
-  '-': infix,
-  '*': infix,
-  '<': infix,
-  '>': infix,
+var scopes = { 
 
-  '=': function (operator, args) {
-    args = moveOverArgs([], args);
-    return eval(args.join('==='));
-  },
-  
-  'print': function (operator, args) {
-    return ''+ args.slice(0, -1); // remove comma
+  'built-in': {
+    '+': infix,
+    '-': infix,
+    '*': infix,
+    '<': infix,
+    '>': infix,
+
+    '=': function (operator, args) {
+      args = moveOverArgs([], args);
+      return eval(args.join('==='));
+    },
+    
+    'print': function (operator, args) {
+      return ''+ args.slice(0, -1); // remove comma
+    }
   }
 
-};
-
-var scopes = { }; // to hold any created scopes
+}; 
 
 // Utility functions
 
@@ -98,34 +99,33 @@ function infix (operator, args) {
 
 var evaluate = function(ast, scope) {
 
-  var unpacked = (function unpack(left, right) {
+  // var unpacked = (function unpack(left, right) {
 
-    if (ast.operator === 'let'){
-      left = unpackAssignment(left);
-    } else if (typeof left === 'object'){
-      left = evaluate(left);
-    } else {
-      left = left;
-    }
+  //   if (ast.operator === 'let'){
+  //     left = unpackAssignment(left);
+  //   } else if (typeof left === 'object'){
+  //     left = evaluate(left);
+  //   } else {
+  //     left = left;
+  //   }
 
-    var args = [];
-    args.push(left);
-    return args.concat(right);
+  //   var args = [];
+  //   args.push(left);
+  //   return args.concat(right);
 
-  })(ast.left, ast.right);
+  // })(ast.left, ast.right);
 
-  var special = specialForms[ast.operator],
-      builtIn = builtIns['' + ast.operator],
-      scope = scopes[scope];
+  var scope = scope || 'built-in',
+      special = specialForms[ast.operator],
+      // builtIn = builtIns[ast.operator],
+      func = scopes[scope][ast.operator];
 
   // console.log(special, builtIn, scope);
 
   if (special) {
-    return special(ast.operator, unpacked);
-  } else if (builtIn) {
-    return builtIn(ast.operator, unpacked);
-  } else if (scope) {
-    return scope[ast.operator](ast.operator, unpacked);
+    return special(ast.operator, ast.expressions);
+  } else if (func) {
+    return func(ast.operator, ast.expressions);
   } else {
     return "Reference error. " + ast.operator + " is not defined."
   }
