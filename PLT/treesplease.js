@@ -5,20 +5,25 @@ var specialForms = {
   'let': let,
 
   'assignment': function (assign, rest) { // here as dispatched from let > evaluate
-        var variable = assign.expressions[0].expressions; // only possible return structure from grammar for an assignment 
-        console.log('assignment args: ', assign, rest);
-        scopes['user'][variable] = assign.expressions[1];
-        console.log(scopes['user']); 
+        
+    console.log('assign:', assign, 'rest:', rest[0]);
+
+    var variable = assign.expressions[0].expressions;
+    // console.log(variable);
+    scopes['user'][variable] = assign.expressions[1];
+    console.log(scopes['user']); 
 
 
-        // iterate through all assignments before evaluating other expressions
+    // iterate through all assignments before evaluating other expressions
 
-        if(rest[0].operator === 'assignment'){
-          specialForms.assignment(rest[0], rest.slice(1));
-        } else {
-          _.forEach(rest, evaluate);
-        }
-    },
+    if(rest.length && rest[0].operator === 'assignment'){
+      specialForms.assignment(rest[0], rest.slice(1));
+    } else {
+      for (var i = 0; i < rest.length; i++){
+        return evaluate(rest[i]);
+      }
+    }
+  },
 
   'var': lookup
 }
@@ -109,11 +114,7 @@ function let(operator, args) {
   // flatten array 1 level & evaluate
 
   var flatArgs = _.flatten(args);
-
-  console.log('flat args:', flatArgs);
-  console.log('flat args sliced:', flatArgs.slice(1));
-
-  specialForms.assignment(flatArgs[0], flatArgs.slice(1));
+  return specialForms.assignment(flatArgs[0], flatArgs.slice(1));
 
 
 
@@ -150,7 +151,7 @@ var evaluate = function(ast, scope) {
       special = specialForms[ast.operator],
       func = scopes[scope][ast.operator];
 
-  console.log(ast.operator, scope, func);
+  console.log(ast, ast.operator, scope, func);
 
   if (special) {
     return special(ast.operator, ast.expressions);
