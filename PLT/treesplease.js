@@ -7,9 +7,8 @@ var specialForms = {
     } else {
       return evaluate(args[2]);
     }
-  }
-
-  ,
+  },
+  
   'let': function (operator, args){ 
     var flatArgs = _.flatten(args);
     return specialForms.assignment(flatArgs[0], flatArgs.slice(1));
