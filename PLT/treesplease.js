@@ -30,17 +30,15 @@ var scopes = {
     '>': infix,
 
     '=': function (operator, args) {
-      args = moveOverArgs([], args);
+      var args = moveOverArgs([], args);
       return eval(args.join('==='));
     },
     
     'print': function (operator, args) {
+      var args = moveOverArgs([], args);
       return args.join('');
     },
 
-    'lookup': function(exp) { // here as dispatched from let > evaluate
-       console.log('lookup called');
-    }
   },
 
   'user': { } // user-defined scope, hardcoded for now
@@ -77,6 +75,13 @@ function let(operator, args) {
 
 function lookup(operator, args){
   // find var, return it
+  console.log('lookup called');
+  
+  if (scopes.user[args]){
+    return scopes.user[args];
+  } else {
+    return 'Reference error. There is no variable ' + args + '. ';
+  }
 }
 
 function infix (operator, args) {
@@ -100,14 +105,14 @@ var evaluate = function(ast, scope) {
       special = specialForms[ast.operator],
       func = scopes[scope][ast.operator];
 
-  console.log(ast, ast.operator, scope, func);
+  console.log(ast, ast.operator, scope);
 
   if (special) {
     return special(ast.operator, ast.expressions);
   } else if (func) {
     return func(ast.operator, ast.expressions);
   } else {
-    return "Reference error. " + ast.operator + " is not defined."
+    return "Reference error: " + ast.operator + " is not defined."
   }
 
 };
