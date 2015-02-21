@@ -11,7 +11,7 @@ var specialForms = {
     // iterate through all assignments before then evaluate other expressions
 
     if(rest.length && rest[0].operator === 'assignment'){
-      specialForms.assignment(rest[0], rest.slice(1));
+      return specialForms.assignment(rest[0], rest.slice(1));
     } else {
       return moveOverArgs([], rest);
     }
@@ -75,8 +75,6 @@ function let(operator, args) {
 
 function lookup(operator, args){
   // find var, return it
-  console.log('lookup called');
-  
   if (scopes.user[args]){
     return scopes.user[args];
   } else {
