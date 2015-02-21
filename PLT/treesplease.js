@@ -19,9 +19,7 @@ var specialForms = {
     if(rest.length && rest[0].operator === 'assignment'){
       specialForms.assignment(rest[0], rest.slice(1));
     } else {
-      for (var i = 0; i < rest.length; i++){
-        return evaluate(rest[i]);
-      }
+      return moveOverArgs([], rest);
     }
   },
 
