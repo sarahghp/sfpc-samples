@@ -5,16 +5,10 @@ var specialForms = {
   'let': let,
 
   'assignment': function (assign, rest) { // here as dispatched from let > evaluate
-        
-    console.log('assign:', assign, 'rest:', rest[0]);
-
     var variable = assign.expressions[0].expressions;
-    // console.log(variable);
     scopes['user'][variable] = assign.expressions[1];
-    console.log(scopes['user']); 
 
-
-    // iterate through all assignments before evaluating other expressions
+    // iterate through all assignments before then evaluate other expressions
 
     if(rest.length && rest[0].operator === 'assignment'){
       specialForms.assignment(rest[0], rest.slice(1));
@@ -44,9 +38,9 @@ var scopes = {
       return args.join('');
     },
 
-    // 'lookup': function(exp) { // here as dispatched from let > evaluate
-    //    // if there are two args it is an assignment, if not it is a retreival/lookup 
-    // }
+    'lookup': function(exp) { // here as dispatched from let > evaluate
+       console.log('lookup called');
+    }
   },
 
   'user': { } // user-defined scope, hardcoded for now
@@ -66,39 +60,6 @@ function moveOverArgs(currentArr, arr) {
   }
 }
 
-// function moveOverAssignment(currentArr, arr){
-
-//   var expression = arr[0];
-//   expression = replaceVars(expression, Object.keys(scopes));
-//   currentArr.push(evaluate(PLT.parser.parse(expression)));
-
-//   var remainingArr = arr.slice(1);
-//   if (remainingArr.length > 0){
-//     return moveOverAssignment(currentArr, remainingArr);
-//   } else {
-//     return currentArr.join(", ");
-//   }
-// }
-
-// function replaceVars(expression, keys){
-
-//   var key = keys[0];
-//   expression = expression.replace(key, '"' + scopes[key] + '"');
-
-//   var remainingKeys = keys.slice(1);
-//   if (remainingKeys.length > 0){
-//     return replaceVars(expression, remainingKeys);
-//   } else {
-//     return expression;
-//   }
-// }
-
-// function unpackAssignment(assignmentArr){
-//   for (var i=0; i < assignmentArr.length; i++){
-//     assignment(assignmentArr[i].left, assignmentArr[i].right);
-//   }
-//   return true;
-// }
 
 function conditional(operator, args) { 
   if (evaluate(args[0])){
@@ -110,19 +71,9 @@ function conditional(operator, args) {
 
 function let(operator, args) {
   // flatten array 1 level & evaluate
-
   var flatArgs = _.flatten(args);
   return specialForms.assignment(flatArgs[0], flatArgs.slice(1));
-
-
-
-  // dispatch args — if there are two args it is an assignment, if not it is a retreival/lookup <- put in lookup?
-  // return moveOverAssignment([], args.slice(1)); // first arg from let returns true 
 }
-
-// function assignment(a, b) {
-//   scopes[a] = b;
-// }
 
 function lookup(operator, args){
   // find var, return it
