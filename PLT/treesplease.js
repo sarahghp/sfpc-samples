@@ -1,8 +1,19 @@
 // Access functions & scope
 
 var specialForms = {
-  'if': conditional,
-  'let': let,
+  'if': function (operator, args) { 
+    if (evaluate(args[0])){
+      return evaluate(args[1]);
+    } else {
+      return evaluate(args[2]);
+    }
+  }
+
+  ,
+  'let': function (operator, args){ 
+    var flatArgs = _.flatten(args);
+    return specialForms.assignment(flatArgs[0], flatArgs.slice(1));
+  },
 
   'assignment': function (assign, rest) { // here as dispatched from let > evaluate
     var variable = assign.expressions[0].expressions;
@@ -18,7 +29,7 @@ var specialForms = {
   },
 
   'var': lookup
-}
+};
 
 var scopes = { 
 
@@ -58,20 +69,6 @@ function moveOverArgs(currentArr, arr) {
   }
 }
 
-
-function conditional(operator, args) { 
-  if (evaluate(args[0])){
-    return evaluate(args[1]);
-  } else {
-    return evaluate(args[2]);
-  }
-}
-
-function let(operator, args) {
-  // flatten array 1 level & evaluate
-  var flatArgs = _.flatten(args);
-  return specialForms.assignment(flatArgs[0], flatArgs.slice(1));
-}
 
 function lookup(operator, args){
   // find var, return it
