@@ -24,18 +24,18 @@ var specialForms = {
 
 
 var builtIn = {
-    '+': infix,
-    '-': infix,
-    '*': infix,
-    '<': infix,
-    '>': infix,
+    '+': function(args) { return infix(args)('+')},
+    '-': function(args) { return infix(args)('-')},
+    '*': function(args) { return infix(args)('*')},
+    '<': function(args) { return infix(args)('<')},
+    '>': function(args) { return infix(args)('>')},
 
-    '=': function (operator, args) {
+    '=': function (args) {
       var args = moveOverArgs([], args);
       return eval(args.join('==='));
     },
     
-    'print': function (operator, args, scope) {
+    'print': function (args, scope) {
       var args = moveOverArgs([], args, scope);
       return args.join('');
     }
@@ -59,9 +59,11 @@ function moveOverArgs(currentArr, arr, scope) {
 }
 
 
-function infix (operator, args) {
-  args = moveOverArgs([], args);
-  return eval(args.join(operator));
+function infix (args) {
+  return function(operator){
+    args = moveOverArgs([], args);
+    return eval(args.join(operator));
+  }
 }
 
 function assignment (assign, rest, scoped) {
@@ -93,7 +95,7 @@ function lookup(args, scope){
 
   var scope = scope;  
 
-  var res = (function checkScope(check){
+  return (function checkScope(check){
     if (check >= 0){
       if (scopes[scope][args]){
         return scopes[scope][args];
@@ -106,7 +108,6 @@ function lookup(args, scope){
     }
   })(scope);
 
-  return res;
 }
 
 function resetScopes(){
@@ -133,7 +134,7 @@ var evaluate = function(ast, scope) {
   if (special) {
     return special(ast.expressions, scope);
   } else {
-    return lookup(ast.operator, scope)(ast.operator, ast.expressions, scope);  // does this have to change to lookup, so it can go up the chain?
+    return lookup(ast.operator, scope)(ast.expressions, scope);
   } 
 
 };
