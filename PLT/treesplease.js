@@ -108,7 +108,7 @@ function lookup(args, scope){
 }
 
 function resetScopes(){
-  scopes = scopes.slice(0, 1);
+  scopes = _.dropRight(scopes, scopes.length - 1);
 }
 
 // Evaluation
