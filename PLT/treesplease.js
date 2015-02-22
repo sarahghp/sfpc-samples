@@ -1,4 +1,6 @@
-// WHERE I LEFT OFF: UPDATE EVAL FUNC CALL TO GO UP THE CHAIN, PROLLY WITH LOOKUP
+// CLEAR SCOPE WHEN EVAL IS CALLED FIRST TIME
+// ERROR INTERRUPTING MY ERROR
+// CLEAN UP CALLS
 
 // Access functions & scope
 
@@ -16,7 +18,7 @@ var specialForms = {
   ,
   'let': function (args){ 
     var flatArgs = _.flatten(args);
-    return specialForms.assignment(flatArgs[0], flatArgs.slice(1));
+    return assignment(flatArgs[0], flatArgs.slice(1));
   },
 
   'assignment': assignment,
@@ -60,8 +62,8 @@ var builtIn = {
       return eval(args.join('==='));
     },
     
-    'print': function (operator, args) {
-      var args = moveOverArgs([], args);
+    'print': function (operator, args, scope) {
+      var args = moveOverArgs([], args, scope);
       return args.join('');
     }
 
@@ -80,31 +82,12 @@ function moveOverArgs(currentArr, arr, scope) {
   
   var remainingArr = arr.slice(1);
   if (remainingArr.length > 0) { 
-    return moveOverArgs(currentArr, remainingArr);
+    return moveOverArgs(currentArr, remainingArr, scope);
   } else {
     return currentArr;
   }
 }
 
-
-function lookup(args, scope){
-
-  var scope = scope;  
-
-  var res = (function checkScope(check){
-    if (check >= 0){
-      if (scopes.user[scope][args]){
-        return scopes.user[scope][args];
-      } else {
-        return checkScope(scope--);
-      }
-    } else {
-    return 'Reference error. There is no variable ' + args + '. '
-    }
-  })(scope);
-
-  return res;
-}
 
 function infix (operator, args) {
   args = moveOverArgs([], args);
@@ -131,11 +114,12 @@ function assignment (assign, rest, scoped) {
     // put identity in current scope or create new scope and add
 
     if (scoped) {
-      console.log('scoped!', scopes['user']);
       scopes[scopes.length - 1][variable] = value;
+      console.log('scopes arr:', scopes);
     } else { 
-      userScope.push(Object.create(Object.prototype));
+      scopes.push(Object.create(Object.prototype));
       scopes[scopes.length - 1][variable] = value;
+      console.log('scopes arr:', scopes);
     }
       
     // iterate through all assignments before then evaluate other expressions
@@ -145,7 +129,26 @@ function assignment (assign, rest, scoped) {
     } else {
       return moveOverArgs([], rest, scopes.length - 1); // how do I pass scope here for correct evaluation?
     }
-  }
+}
+
+function lookup(args, scope){
+
+  var scope = scope;  
+
+  var res = (function checkScope(check){
+    if (check >= 0){
+      if (scopes[scope][args]){
+        return scopes[scope][args];
+      } else {
+        return checkScope(scope--);
+      }
+    } else {
+    return 'Reference error. There is no variable ' + args + '. '
+    }
+  })(scope);
+
+  return res;
+}
 
 // Evaluation
 
@@ -168,17 +171,19 @@ var evaluate = function(ast, scope) {
 
   scope = scope || 0;
   special = specialForms[ast.operator];
-  func = scopes[scope][ast.operator];
+  // func = scopes[scope][ast.operator];
 
   console.log(ast, ast.operator, scope);
 
   if (special) {
     return special(ast.expressions, scope);
-  } else if (func) {
-    return func(ast.operator, ast.expressions);  // does this have to change to lookup, so it can go up the chain?
   } else {
-    return "Reference error: " + ast.operator + " is not defined."
-  }
+    return lookup(ast.operator, scope)(ast.operator, ast.expressions, scope);  // does this have to change to lookup, so it can go up the chain?
+  } 
+
+  // else {
+  //   return "Reference error: " + ast.operator + " is not defined."
+  // }
 
 };
 
