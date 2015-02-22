@@ -4,8 +4,6 @@
 
 // Access functions & scope
 
-// var scopeNum = 0; // to not have to subtract 1 everywhere, tho is this just going to eq assignment.thisScope?
-
 var specialForms = {
   'if': function (args) { 
     if (evaluate(args[0])){
@@ -26,29 +24,6 @@ var specialForms = {
   'var': lookup
 };
 
-// var scopes = { 
-
-//   'built-in': {
-//     '+': infix,
-//     '-': infix,
-//     '*': infix,
-//     '<': infix,
-//     '>': infix,
-
-//     '=': function (operator, args) {
-//       var args = moveOverArgs([], args);
-//       return eval(args.join('==='));
-//     },
-    
-//     'print': function (operator, args) {
-//       var args = moveOverArgs([], args);
-//       return args.join('');
-//     }
-
-//   },
-
-//   'user': [ ] // user-defined scopes
-// }; 
 
 var builtIn = {
     '+': infix,
@@ -75,9 +50,6 @@ var scopes = [ builtIn ];
 
 function moveOverArgs(currentArr, arr, scope) {
 
-  // in here have to indicate in eval call that it is in a scope if called from assignment?
-  // alternately check in eval itself?
-
   typeof arr[0] === 'object' ? currentArr.push(evaluate(arr[0], scope)) : currentArr.push(arr[0]);
   
   var remainingArr = arr.slice(1);
@@ -96,20 +68,10 @@ function infix (operator, args) {
 
 function assignment (assign, rest, scoped) {
 
-    // how to rewrite so that scope increments for new things & then is passed into move over args/lookup
-    // scopes.length?
-
-    // increment scope number since we are now in the base user scope
-
-    // scopeNum++
-    // console.log('scopeNum:', scopeNum);
-
     // the first expression following 'let' MUST be a binding
 
     var variable = assign.expressions[0].expressions,
         value = assign.expressions[1];
-        // userScope = scopes['user'],
-        // thisScope = userScope[scopeNum]; 
 
     // put identity in current scope or create new scope and add
 
@@ -127,7 +89,7 @@ function assignment (assign, rest, scoped) {
     if(rest.length && rest[0].operator === 'assignment'){
       return specialForms.assignment(rest[0], rest.slice(1), true);
     } else {
-      return moveOverArgs([], rest, scopes.length - 1); // how do I pass scope here for correct evaluation?
+      return moveOverArgs([], rest, scopes.length - 1);
     }
 }
 
@@ -161,17 +123,9 @@ var evaluate = function(ast, scope) {
   }
 
   // Then set scope & evaluate
-  // Note that when the var operator is used, special will be called before func, assuring that it is found
 
-  var scope, special, func;
-
-  // (scopeNum > -1) ?
-  //   (scope = 'user'[scopeNum]) :
-  //   (scope = 'built-in');
-
-  scope = scope || 0;
-  special = specialForms[ast.operator];
-  // func = scopes[scope][ast.operator];
+  var scope = scope || 0,
+      special = specialForms[ast.operator];
 
   console.log(ast, ast.operator, scope);
 
@@ -180,10 +134,6 @@ var evaluate = function(ast, scope) {
   } else {
     return lookup(ast.operator, scope)(ast.operator, ast.expressions, scope);  // does this have to change to lookup, so it can go up the chain?
   } 
-
-  // else {
-  //   return "Reference error: " + ast.operator + " is not defined."
-  // }
 
 };
 
