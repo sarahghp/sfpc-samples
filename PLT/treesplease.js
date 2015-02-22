@@ -1,7 +1,7 @@
 // Access functions & scope
 
 var specialForms = {
-  'if': function (operator, args) { 
+  'if': function (args) { 
     if (evaluate(args[0])){
       return evaluate(args[1]);
     } else {
@@ -9,78 +9,106 @@ var specialForms = {
     }
   },
   
-  'let': function (operator, args){ 
+  'let': function (args){ 
     var flatArgs = _.flatten(args);
-    return specialForms.assignment(flatArgs[0], flatArgs.slice(1));
+    return assignment(flatArgs[0], flatArgs.slice(1));
   },
 
-  'assignment': function (assign, rest) { // here as dispatched from let > evaluate
-    var variable = assign.expressions[0].expressions;
-    scopes['user'][variable] = assign.expressions[1];
-
-    // iterate through all assignments before then evaluate other expressions
-
-    if(rest.length && rest[0].operator === 'assignment'){
-      return specialForms.assignment(rest[0], rest.slice(1));
-    } else {
-      return moveOverArgs([], rest);
-    }
-  },
+  'assignment': assignment,
 
   'var': lookup
 };
 
-var scopes = { 
 
-  'built-in': {
-    '+': infix,
-    '-': infix,
-    '*': infix,
-    '<': infix,
-    '>': infix,
+var builtIn = {
+    '+': function(args) { return infix(args)('+')},
+    '-': function(args) { return infix(args)('-')},
+    '*': function(args) { return infix(args)('*')},
+    '<': function(args) { return infix(args)('<')},
+    '>': function(args) { return infix(args)('>')},
 
-    '=': function (operator, args) {
+    '=': function (args) {
       var args = moveOverArgs([], args);
       return eval(args.join('==='));
     },
     
-    'print': function (operator, args) {
-      var args = moveOverArgs([], args);
+    'print': function (args, scope) {
+      var args = moveOverArgs([], args, scope);
       return args.join('');
-    },
+    }
 
-  },
+  }
 
-  'user': { } // user-defined scope, hardcoded for now
-
-}; 
+var scopes = [ builtIn ];
 
 // Utility functions
 
-function moveOverArgs(currentArr, arr) {
-  typeof arr[0] === 'object' ? currentArr.push(evaluate(arr[0])) : currentArr.push(arr[0]);
+function moveOverArgs(currentArr, arr, scope) {
+
+  typeof arr[0] === 'object' ? currentArr.push(evaluate(arr[0], scope)) : currentArr.push(arr[0]);
   
   var remainingArr = arr.slice(1);
   if (remainingArr.length > 0) { 
-    return moveOverArgs(currentArr, remainingArr);
+    return moveOverArgs(currentArr, remainingArr, scope);
   } else {
     return currentArr;
   }
 }
 
 
-function lookup(operator, args){
-  // find var, return it
-  if (scopes.user[args]){
-    return scopes.user[args];
-  } else {
-    return 'Reference error. There is no variable ' + args + '. ';
+function infix (args) {
+  return function(operator){
+    args = moveOverArgs([], args);
+    return eval(args.join(operator));
   }
 }
 
-function infix (operator, args) {
-  args = moveOverArgs([], args);
-  return eval(args.join(operator));
+function assignment (assign, rest, scoped) {
+
+    // the first expression following 'let' MUST be a binding
+
+    var variable = assign.expressions[0].expressions,
+        value = assign.expressions[1];
+
+    // put identity in current scope or create new scope and add
+
+    if (scoped) {
+      scopes[scopes.length - 1][variable] = value;
+    } else { 
+      scopes.push(Object.create(Object.prototype));
+      scopes[scopes.length - 1][variable] = value;
+    }
+      
+    // iterate through all assignments before then evaluate other expressions
+
+    if(rest.length && rest[0].operator === 'assignment'){
+      return specialForms.assignment(rest[0], rest.slice(1), true);
+    } else {
+      return moveOverArgs([], rest, scopes.length - 1);
+    }
+}
+
+function lookup(args, scope){
+
+  var scope = scope;  
+
+  return (function checkScope(check){
+    if (check >= 0){
+      if (scopes[scope][args]){
+        return scopes[scope][args];
+      } else {
+        scope -= 1;
+        return checkScope(scope);
+      }
+    } else {
+    return 'Reference error. There is no variable ' + args + '. '
+    }
+  })(scope);
+
+}
+
+function resetScopes(){
+  scopes = scopes.slice(0, 1);
 }
 
 // Evaluation
@@ -95,19 +123,16 @@ var evaluate = function(ast, scope) {
 
   // Then set scope & evaluate
 
-  var scope = scope || 'built-in',
-      special = specialForms[ast.operator],
-      func = scopes[scope][ast.operator];
+  var scope = scope || 0,
+      special = specialForms[ast.operator];
 
   console.log(ast, ast.operator, scope);
 
   if (special) {
-    return special(ast.operator, ast.expressions);
-  } else if (func) {
-    return func(ast.operator, ast.expressions);
+    return special(ast.expressions, scope);
   } else {
-    return "Reference error: " + ast.operator + " is not defined."
-  }
+    return lookup(ast.operator, scope)(ast.expressions, scope);
+  } 
 
 };
 
@@ -115,5 +140,6 @@ var evaluate = function(ast, scope) {
 
 var run = function(source) {
   var ast = PLT.parser.parse(source);
+  resetScopes();
   return evaluate(ast);
 };
