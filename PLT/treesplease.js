@@ -1,4 +1,3 @@
-// CLEAR SCOPE WHEN EVAL IS CALLED FIRST TIME
 // ERROR INTERRUPTING MY ERROR
 // CLEAN UP CALLS
 
@@ -112,6 +111,10 @@ function lookup(args, scope){
   return res;
 }
 
+function resetScopes(){
+  scopes = scopes.slice(0, 1);
+}
+
 // Evaluation
 
 var evaluate = function(ast, scope) {
@@ -141,5 +144,6 @@ var evaluate = function(ast, scope) {
 
 var run = function(source) {
   var ast = PLT.parser.parse(source);
+  resetScopes();
   return evaluate(ast);
 };
