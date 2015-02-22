@@ -1,5 +1,3 @@
-// CLEAN UP CALLS
-
 // Access functions & scope
 
 var specialForms = {
