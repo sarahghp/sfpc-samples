@@ -1,4 +1,3 @@
-// ERROR INTERRUPTING MY ERROR
 // CLEAN UP CALLS
 
 // Access functions & scope
@@ -76,11 +75,9 @@ function assignment (assign, rest, scoped) {
 
     if (scoped) {
       scopes[scopes.length - 1][variable] = value;
-      console.log('scopes arr:', scopes);
     } else { 
       scopes.push(Object.create(Object.prototype));
       scopes[scopes.length - 1][variable] = value;
-      console.log('scopes arr:', scopes);
     }
       
     // iterate through all assignments before then evaluate other expressions
@@ -101,7 +98,8 @@ function lookup(args, scope){
       if (scopes[scope][args]){
         return scopes[scope][args];
       } else {
-        return checkScope(scope--);
+        scope -= 1;
+        return checkScope(scope);
       }
     } else {
     return 'Reference error. There is no variable ' + args + '. '
